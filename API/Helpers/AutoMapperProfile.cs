@@ -9,7 +9,8 @@ namespace API.Helpers
         public static MapperConfiguration config = new MapperConfiguration(cfg => 
             {
                 cfg.CreateMap<Make, MakeResource>();
-                cfg.CreateMap<Feature, FeaturesForListDto>();
+                cfg.CreateMap<Model, ModelResource>();
+                cfg.CreateMap<Feature, FeatureResource>();
             }
         );
     }

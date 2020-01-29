@@ -27,7 +27,7 @@ namespace API.Controllers
         public async Task<IActionResult> Get()
         {
             var features = await _dbContext.Features.ToListAsync();
-            var featuresList = _mapper.Map<IEnumerable<FeaturesForListDto>>(features);
+            var featuresList = _mapper.Map<List<FeatureResource>>(features);
             return Ok(featuresList);
         }
     }
