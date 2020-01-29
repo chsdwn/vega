@@ -27,7 +27,7 @@ namespace API.Controllers
         public async Task<IActionResult> Get()
         {
             var makes = await _dbContext.Makes.Include(m => m.Models).ToListAsync();
-            var makesList = _mapper.Map<IEnumerable<MakesForListDto>>(makes);
+            var makesList = _mapper.Map<IEnumerable<MakeResource>>(makes);
             return Ok(makesList);
         }
     }
