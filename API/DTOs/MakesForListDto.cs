@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using API.Models;
 
-namespace API.Models
+namespace API.DTOs
 {
-    public class Make
+    public class MakesForListDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
