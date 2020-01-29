@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Cal\\CSharp\\vega\\api\\API.csproj": {}
+    "D:\\cal\\csharp\\vega\\API\\API.csproj": {}
   },
   "projects": {
-    "D:\\Cal\\CSharp\\vega\\api\\API.csproj": {
+    "D:\\cal\\csharp\\vega\\API\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Cal\\CSharp\\vega\\api\\API.csproj",
+        "projectUniqueName": "D:\\cal\\csharp\\vega\\API\\API.csproj",
         "projectName": "API",
-        "projectPath": "D:\\Cal\\CSharp\\vega\\api\\API.csproj",
+        "projectPath": "D:\\cal\\csharp\\vega\\API\\API.csproj",
         "packagesPath": "C:\\Users\\Chase\\.nuget\\packages\\",
-        "outputPath": "D:\\Cal\\CSharp\\vega\\api\\obj\\",
+        "outputPath": "D:\\cal\\csharp\\vega\\API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
