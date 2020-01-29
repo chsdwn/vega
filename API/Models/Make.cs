@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using API.Models;
 
 namespace API.Models
@@ -8,5 +9,10 @@ namespace API.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public ICollection<Model> Models { get; set; }
+
+        public Make()
+        {
+            Models = new Collection<Model>();
+        }
     }
 }
