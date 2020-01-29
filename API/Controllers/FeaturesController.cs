@@ -9,20 +9,20 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MakesController : ControllerBase
+    public class FeaturesController : ControllerBase
     {
         private readonly VegaDbContext _dbContext;
 
-        public MakesController(VegaDbContext dbContext)
+        public FeaturesController(VegaDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Make>> Get()
+        public async Task<IEnumerable<Feature>> Get()
         {
-            var makes = await _dbContext.Makes.Include(m => m.Models).ToListAsync();
-            return makes;
+            var features = await _dbContext.Features.ToListAsync();
+            return features;
         }
     }
 }
