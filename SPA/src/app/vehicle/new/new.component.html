@@ -1,0 +1,53 @@
+<form [formGroup]="newVehicleForm" (ngSubmit)="onSubmit()" class="vehicle-form">
+  <h1 class="vehicle-form__title">Add New Vehicle</h1>
+  <div formGroupName="vehicleData">
+    <div class="vehicle-form__make">
+      <label for="makes">Makes: </label>
+      <select name="makes" id="makes" formControlName="makes">
+        <option value=""></option>
+      </select>
+    </div>
+
+    <div class="vehicle-form__model">
+      <label for="models">Models: </label>
+      <select name="models" id="models" formControlName="models">
+        <option value=""></option>
+      </select>
+    </div>
+
+    <div class="vehicle-form__registered">
+      <p class="vehicle-form__registered--question">Is this vehicle registered?</p>
+      <input type="radio" id="registered" name="isCarRegistered" formControlName="registered" value="registered"
+        checked>
+      <label for="registered">Yes</label>
+
+      <input type="radio" id="notRegistered" name="isCarRegistered" formControlName="notRegistered"
+        value="notRegistered">
+      <label for="notRegistered">No</label>
+    </div>
+
+    <div class="vehicle-form__features">
+      <p class="vehicle-form__features--label">Features: </p>
+      <input type="checkbox" id="abs" formControlName="abs" value="abs" class="vehicle-form__features--checkbox">
+      <label for="abs" class="vehicle-form__features--checkbox-label">ABS</label>
+
+      <input type="checkbox" id="gps" formControlName="gps" value="gps" class="vehicle-form__features--checkbox">
+      <label for="gps" class="vehicle-form__features--checkbox-label">GPS</label>
+    </div>
+
+    <div class="vehicle-form__textbox">
+      <label for="contactName">Contact Name: </label>
+      <input type="text" id="contactName" formControlName="contactName">
+    </div>
+
+    <div class="vehicle-form__textbox">
+      <label for="contactPhone">Contact Phone: </label>
+      <input type="text" id="contactPhone" formControlName="contactPhone">
+    </div>
+
+    <div class="vehicle-form__textbox">
+      <label for="contactMail">Contact Email: </label>
+      <input type="email" id="contactMail" formControlName="contactMail">
+    </div>
+  </div>
+</form>
