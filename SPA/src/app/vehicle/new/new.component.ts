@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map, take, tap } from 'rxjs/operators';
 import { environment } from './../../../environments/environment.prod';
 import { MakesService } from './../../services/makes.service';
+import { FeatureService } from './../../services/feature.service';
 
 import { Make } from 'src/app/models/Make';
 import { Model } from 'src/app/models/Model';
@@ -24,30 +25,26 @@ export class NewComponent implements OnInit {
     {id: 2, name: 'GPS'},
     {id: 3, name: 'Sunroof'}
   ];
+  featuresTest: Feature[];
+  isFetching = false;
+  featureLabelsArray = new FormArray([]);
 
-  constructor(private http: HttpClient, private makesService: MakesService) { }
+  constructor(
+    private http: HttpClient,
+    private makesService: MakesService,
+    private featureService: FeatureService
+  ) { }
 
   ngOnInit() {
     this.makesService.get().subscribe(data => this.makes = data);
-    // this.http.get<Make[]>('http://localhost:5000/api/features').pipe(
-    //   map(data => this.features = data),
-    //   map(data => this.featuresControls.map(control => new FormControl(false)))
-    // );
 
-    this.newVehicleForm = new FormGroup({
-      vehicleData: new FormGroup({
-        makes: new FormControl(),
-        models: new FormControl(),
-        isCarRegistered: new FormControl(),
-        contactName: new FormControl(),
-        contactPhone: new FormControl(),
-        contactMail: new FormControl(),
-        featureLabels: new FormArray([
-          new FormControl(),
-          new FormControl(),
-          new FormControl()
-        ])
-      }),
+    this.isFetching = true;
+    this.featureService.get().subscribe(data => {
+      this.featuresTest = data;
+      this.isFetching = false;
+      if (!this.isFetching) {
+        this.createForm();
+      }
     });
   }
 
@@ -59,7 +56,17 @@ export class NewComponent implements OnInit {
     this.models = this.makes.find(make => make.id === +id).models;
   }
 
-  onFeatureSelected(e) {
-    console.log(e);
+  createForm() {
+    this.newVehicleForm = new FormGroup({
+      vehicleData: new FormGroup({
+        makes: new FormControl(),
+        models: new FormControl(),
+        isCarRegistered: new FormControl(),
+        contactName: new FormControl(),
+        contactPhone: new FormControl(),
+        contactMail: new FormControl(),
+        featureLabels: new FormArray(this.featuresTest.map(f => new FormControl(false)))
+      })
+    });
   }
 }
