@@ -3,37 +3,45 @@
   <div formGroupName="vehicleData">
     <div class="vehicle-form__make">
       <label for="makes">Makes: </label>
-      <select name="makes" id="makes" formControlName="makes">
-        <option value=""></option>
+      <select name="makes" id="makes" formControlName="makes" (ngModelChange)="onModelSelect($event)">
+        <option *ngFor="let make of makes;" [value]="make.id">{{ make.name }}</option>
       </select>
     </div>
 
-    <div class="vehicle-form__model">
-      <label for="models">Models: </label>
-      <select name="models" id="models" formControlName="models">
-        <option value=""></option>
-      </select>
-    </div>
+    <ng-container *ngIf="models">
+      <div class="vehicle-form__model">
+        <label for="models">Models: </label>
+        <select name="models" id="models" formControlName="models">
+          <option *ngFor="let model of models; let i = index" [value]="i">{{ model.name }}</option>
+        </select>
+      </div>
+    </ng-container>
 
     <div class="vehicle-form__registered">
       <p class="vehicle-form__registered--question">Is this vehicle registered?</p>
-      <input type="radio" id="registered" name="isCarRegistered" formControlName="registered" value="registered"
+      <input type="radio" id="registered" name="isCarRegistered" formControlName="isCarRegistered" value="registered"
         checked>
       <label for="registered">Yes</label>
 
-      <input type="radio" id="notRegistered" name="isCarRegistered" formControlName="notRegistered"
+      <input type="radio" id="notRegistered" name="isCarRegistered" formControlName="isCarRegistered"
         value="notRegistered">
       <label for="notRegistered">No</label>
     </div>
 
-    <div class="vehicle-form__features">
-      <p class="vehicle-form__features--label">Features: </p>
-      <input type="checkbox" id="abs" formControlName="abs" value="abs" class="vehicle-form__features--checkbox">
-      <label for="abs" class="vehicle-form__features--checkbox-label">ABS</label>
-
-      <input type="checkbox" id="gps" formControlName="gps" value="gps" class="vehicle-form__features--checkbox">
-      <label for="gps" class="vehicle-form__features--checkbox-label">GPS</label>
-    </div>
+    <ng-container *ngIf="features">
+      <div formArrayName="featureLabels">
+      <div class="vehicle-form__features" *ngFor="let feature of features; let i = index">
+        <input
+          type="checkbox"
+          [id]="feature.id"
+          [value]="feature.name.toLowerCase()"
+          [formControlName]="i"
+          (change)="onFeatureSelected($event)">
+        <label [for]="feature.id">{{ feature.name }}</label>
+        <br>
+      </div>
+      </div>
+    </ng-container>
 
     <div class="vehicle-form__textbox">
       <label for="contactName">Contact Name: </label>
@@ -50,4 +58,6 @@
       <input type="email" id="contactMail" formControlName="contactMail">
     </div>
   </div>
+  <input type="submit" value="Send">
+
 </form>

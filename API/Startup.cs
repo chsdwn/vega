@@ -38,6 +38,20 @@ namespace API
 
             services.AddControllersWithViews().AddNewtonsoftJson(options => 
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            services.AddCors(options => 
+                {
+                    options.AddDefaultPolicy(
+                        builder => 
+                        {
+                            builder.WithOrigins("http://localhost:4200")
+                                .AllowAnyHeader()
+                                .AllowAnyMethod()
+                                .AllowAnyOrigin();
+                        }
+                    );
+                }
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,7 +62,9 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            app.UseCors();
+
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
