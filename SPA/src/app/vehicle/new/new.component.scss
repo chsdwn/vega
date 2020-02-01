@@ -125,12 +125,13 @@
     height: 4rem;
     margin-top: 1rem;
     background-color: white;
-    border: 1px solid grey;
+    border: 1px solid lightgrey;
     border-radius: 3px;
     box-shadow: 0 5px 3px grey;
+    outline: none;
     font-size: 1.8rem;
 
-    transition: all .2s;
+    transition: all .15s;
 
     &:hover {
       background-color: #eee;

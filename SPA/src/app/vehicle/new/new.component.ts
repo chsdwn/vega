@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormArray, FormBuilder } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map, take, tap } from 'rxjs/operators';
-import { environment } from './../../../environments/environment.prod';
-import { MakesService } from './../../services/makes.service';
-import { FeatureService } from './../../services/feature.service';
+import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { VehicleService } from './../../services/vehicle.service';
 
 import { Make } from 'src/app/models/Make';
 import { Model } from 'src/app/models/Model';
@@ -18,42 +13,33 @@ import { Feature } from './../../models/Feature';
 })
 export class NewComponent implements OnInit {
   newVehicleForm: FormGroup;
+  vehicle: {
+    make: number,
+    model: number
+  } = {
+    make: -1,
+    model: -1
+  };
   makes: Make[];
   models: Model[];
-  features: Feature[] = [
-    {id: 1, name: 'ABS'},
-    {id: 2, name: 'GPS'},
-    {id: 3, name: 'Sunroof'}
-  ];
-  featuresTest: Feature[];
+  features: Feature[];
   isFetching = false;
-  featureLabelsArray = new FormArray([]);
 
   constructor(
-    private http: HttpClient,
-    private makesService: MakesService,
-    private featureService: FeatureService
+    private vehicleService: VehicleService
   ) { }
 
   ngOnInit() {
-    this.makesService.get().subscribe(data => this.makes = data);
+    this.vehicleService.getMakes().subscribe(data => this.makes = data);
 
     this.isFetching = true;
-    this.featureService.get().subscribe(data => {
-      this.featuresTest = data;
+    this.vehicleService.getFeatures().subscribe(data => {
+      this.features = data;
       this.isFetching = false;
       if (!this.isFetching) {
         this.createForm();
       }
     });
-  }
-
-  onSubmit() {
-    console.log(this.newVehicleForm.value);
-  }
-
-  onModelSelect(id: number) {
-    this.models = this.makes.find(make => make.id === +id).models;
   }
 
   createForm() {
@@ -65,8 +51,29 @@ export class NewComponent implements OnInit {
         contactName: new FormControl(),
         contactPhone: new FormControl(),
         contactMail: new FormControl(),
-        featureLabels: new FormArray(this.featuresTest.map(f => new FormControl(false)))
+        featureLabels: new FormArray(this.features.map(f => new FormControl(false)))
       })
     });
+  }
+
+  onMakeChange(e) {
+    const id = +e.target.value;
+    this.vehicle.make = id;
+
+    const selectedMake = this.makes.find(m => m.id === id);
+    this.models = selectedMake.models;
+
+    console.log('vehicle', this.vehicle);
+  }
+
+  onModelChange(e) {
+    const id = +e.target.value;
+    this.vehicle.model = id;
+
+    console.log('vehicle', this.vehicle);
+  }
+
+  onSubmit() {
+    console.log(this.newVehicleForm.value);
   }
 }

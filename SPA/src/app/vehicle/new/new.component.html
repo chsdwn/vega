@@ -8,7 +8,7 @@
         name="makes"
         id="makes"
         formControlName="makes"
-        (ngModelChange)="onModelSelect($event)"
+        (change)="onMakeChange($event)"
         class="vehicle-form__make--dropdown">
         <option *ngFor="let make of makes" [value]="make.id">{{ make.name }}</option>
       </select>
@@ -16,7 +16,12 @@
 
     <div class="vehicle-form__make">
       <label for="models" class="vehicle-form__make--title">Models: </label>
-      <select name="models" id="models" formControlName="models" class="vehicle-form__make--dropdown" placeholder="test">
+      <select 
+        name="models"
+        id="models"
+        formControlName="models"
+        (change)="onModelChange($event)"
+        class="vehicle-form__make--dropdown">
         <ng-container *ngIf="models">
           <option *ngFor="let model of models" [value]="model.id">{{ model.name }}</option>
         </ng-container>
@@ -52,7 +57,7 @@
 
     <p class="vehicle-form__features-title">Features</p>
     <div formArrayName="featureLabels" class="vehicle-form__features">
-      <div class="vehicle-form__features--feature" *ngFor="let feature of featuresTest; let i = index">
+      <div class="vehicle-form__features--feature" *ngFor="let feature of features; let i = index">
         <input
           type="checkbox"
           [id]="feature.id"
