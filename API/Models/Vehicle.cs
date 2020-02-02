@@ -8,7 +8,6 @@ namespace API.Models
     {
         public int Id { get; set; }
         
-        [Required]
         public Model Model { get; set; }
 
         [Required]
