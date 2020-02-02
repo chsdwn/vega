@@ -16,6 +16,8 @@ namespace API.Models
 
         public bool VehicleRegistered { get; set; }
 
+        public ICollection<VehicleFeature> VehicleFeatures { get; set; }
+
         [Required]
         [StringLength(255)]
         public string ContactName { get; set; }
