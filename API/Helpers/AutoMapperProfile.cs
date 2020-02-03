@@ -61,14 +61,14 @@ namespace API.Helpers
                         (vfc, v) => {
                             // Remove unselected objects
                             var removedFeatures = v.Features.Where(f => !vfc.Features.Contains(f.FeatureId));
-                            foreach(var feature in removedFeatures)
+                            foreach(var feature in removedFeatures.ToList())
                                 v.Features.Remove(feature);
 
                             // Add new features
                             var addedFeatures = vfc.Features
                                 .Where(id => !v.Features.Any(f => f.FeatureId == id))
                                 .Select(id => new VehicleFeature { FeatureId = id});
-                            foreach(var feature in addedFeatures)
+                            foreach(var feature in addedFeatures.ToList())
                                 v.Features.Add(feature);
                         }
                     );
