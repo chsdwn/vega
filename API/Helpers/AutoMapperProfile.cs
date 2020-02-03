@@ -37,7 +37,11 @@ namespace API.Helpers
                     );
                 cfg.CreateMap<Vehicle, VehicleForList>()
                     .ForMember(
-                        dest => dest.Model,
+                        dest => dest.MakeName,
+                        opt => opt.MapFrom(src => src.Model.Make.Name)
+                    )
+                    .ForMember(
+                        dest => dest.ModelName,
                         opt => opt.MapFrom(src => src.Model.Name)
                     );
                 cfg.CreateMap<VehicleForCreation, Vehicle>()
