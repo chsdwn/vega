@@ -10,6 +10,5 @@ namespace API.Data
          void Delete(Vehicle vehicle);
          Task<Vehicle> Get(int id, bool includeRelated = true);
          Task<IEnumerable<Vehicle>> GetAll();
-         Task<bool> SaveAll();
     }
 }

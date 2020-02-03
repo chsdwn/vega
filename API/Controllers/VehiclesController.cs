@@ -16,11 +16,13 @@ namespace API.Controllers
     public class VehiclesController : ControllerBase
     {
         private readonly IVehicleRepository _repo;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public VehiclesController(IVehicleRepository repo)
+        public VehiclesController(IVehicleRepository repo, IUnitOfWork unitOfWork)
         {
             _repo = repo;
+            _unitOfWork = unitOfWork;
             _mapper = new Mapper(AutoMapperProfile.config);
         }
 
@@ -54,7 +56,7 @@ namespace API.Controllers
             vehicle.LastUpdate = DateTime.UtcNow;
             _repo.Add(vehicle);
 
-            if(await _repo.SaveAll())
+            if(await _unitOfWork.CompleteAsync())
             {
                 vehicle = await _repo.Get(vehicle.Id);
                 var vehicleToReturn = _mapper.Map<VehicleForDetailed>(vehicle);
@@ -75,7 +77,7 @@ namespace API.Controllers
             _mapper.Map(vehicleForUpdateDto, vehicle);
             vehicle.LastUpdate = DateTime.UtcNow;
             
-            if(await _repo.SaveAll())
+            if(await _unitOfWork.CompleteAsync())
             {
                 vehicle = await _repo.Get(id);
                 var vehicleToReturn = _mapper.Map<VehicleForDetailed>(vehicle);
@@ -95,7 +97,7 @@ namespace API.Controllers
 
             _repo.Delete(vehicle);
             
-            if(await _repo.SaveAll())
+            if(await _unitOfWork.CompleteAsync())
                 return Ok($"Vehicle with id: {id} succesfully deleted.");
 
             return BadRequest("An error occured while vehicle deleting.");

@@ -44,10 +44,5 @@ namespace API.Data
                     .ThenInclude(m => m.Make)
                 .ToListAsync();
         }
-
-        public async Task<bool> SaveAll()
-        {
-            return await _dbContext.SaveChangesAsync() > 0;
-        }
     }
 }
