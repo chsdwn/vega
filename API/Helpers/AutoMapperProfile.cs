@@ -11,17 +11,24 @@ namespace API.Helpers
         public static MapperConfiguration config = new MapperConfiguration(cfg => 
             {
                 cfg.CreateMap<Make, MakeResource>();
-                cfg.CreateMap<Model, ModelResource>();
-                cfg.CreateMap<Feature, FeatureResource>();
+                cfg.CreateMap<Make, KeyValuePairResource>();
+                cfg.CreateMap<Model, KeyValuePairResource>();
+                cfg.CreateMap<Feature, KeyValuePairResource>();
 
                 cfg.CreateMap<Vehicle, VehicleForDetailed>()
                     .ForMember(
-                        dest => dest.MakeName,
-                        opt => opt.MapFrom(src => src.Model.Make.Name)
+                        dest => dest.Make,
+                        opt => opt.MapFrom(src => src.Model.Make)
                     )
                     .ForMember(
-                        dest => dest.ModelName,
-                        opt => opt.MapFrom(src => src.Model.Name)
+                        dest => dest.Model,
+                        opt => opt.MapFrom(src => src.Model)
+                    )
+                    .ForMember(
+                        dest => dest.Features,
+                        opt => opt.MapFrom(src => src.Features.Select(
+                            vf => new KeyValuePairResource { Id = vf.Feature.Id, Name = vf.Feature.Name}
+                        ))
                     )
                     .ForMember(
                         dest => dest.Contact,
@@ -30,19 +37,15 @@ namespace API.Helpers
                             Phone = src.ContactPhone,
                             Email = src.ContactEmail
                         })
-                    )
-                    .ForMember(
-                        dest => dest.Features,
-                        opt => opt.MapFrom(src => src.Features.Select(vf => vf.FeatureId))
                     );
                 cfg.CreateMap<Vehicle, VehicleForList>()
                     .ForMember(
-                        dest => dest.MakeName,
-                        opt => opt.MapFrom(src => src.Model.Make.Name)
+                        dest => dest.Make,
+                        opt => opt.MapFrom(src => src.Model.Make)
                     )
                     .ForMember(
-                        dest => dest.ModelName,
-                        opt => opt.MapFrom(src => src.Model.Name)
+                        dest => dest.Model,
+                        opt => opt.MapFrom(src => src.Model)
                     );
                 cfg.CreateMap<VehicleForCreation, Vehicle>()
                     .ForMember(

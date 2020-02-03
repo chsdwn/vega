@@ -27,8 +27,10 @@ namespace API.Data
         public async Task<Vehicle> Get(int id)
         {
             return await _dbContext.Vehicles
-                .Include(v => v.Model.Make)
+                .Include(v => v.Model)
+                    .ThenInclude(m => m.Make)
                 .Include(v => v.Features)
+                    .ThenInclude(vf => vf.Feature)
                 .FirstOrDefaultAsync(v => v.Id == id);
         }
 
