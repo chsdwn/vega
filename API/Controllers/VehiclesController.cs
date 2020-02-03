@@ -60,8 +60,9 @@ namespace API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody]VehicleForCreation vehicleForUpdateDto, int id)
         {
-            var vehicleFromDb = await _dbContext.Vehicles.FirstOrDefaultAsync(v => v.Id == id);
-            clearFeatures(id);
+            var vehicleFromDb = await _dbContext.Vehicles
+                .Include(v => v.Features)
+                .FirstOrDefaultAsync(v => v.Id == id);
 
             _mapper.Map(vehicleForUpdateDto, vehicleFromDb);
             vehicleFromDb.LastUpdate = DateTime.UtcNow;
@@ -79,17 +80,6 @@ namespace API.Controllers
             await _dbContext.SaveChangesAsync();
 
             return Ok($"Vehicle with id: {id} succesfully deleted.");
-        }
-
-        private async void clearFeatures(int vehicleId)
-        {
-            var features = await _dbContext.VehicleFeatures.ToListAsync();
-            var featuresToDelete = features.FindAll(f => f.VehicleId == vehicleId);
-
-            foreach(var featureToDelete in featuresToDelete) 
-            {
-                _dbContext.VehicleFeatures.Remove(featureToDelete);
-            }
         }
     }
 }

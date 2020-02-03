@@ -2,6 +2,7 @@ using AutoMapper;
 using API.Models;
 using API.DTOs;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace API.Helpers
 {
@@ -46,7 +47,34 @@ namespace API.Helpers
                     )
                     .ForMember(
                         dest => dest.Features,
-                        opt => opt.MapFrom(src => src.Features.Select(id => new VehicleFeature { FeatureId = id }))
+                        opt => opt.Ignore()
+                    )
+                    .AfterMap(
+                        (vfc, v) => {
+                            // Remove unselected objects
+                            var removedFeatures = new List<VehicleFeature>();
+                            foreach(var feature in v.Features)
+                            {
+                                if(!vfc.Features.Contains(feature.FeatureId))
+                                {
+                                    removedFeatures.Add(feature);
+                                }
+                            }
+
+                            foreach(var feature in removedFeatures)
+                            {
+                                v.Features.Remove(feature);
+                            }
+
+                            // Add new features
+                            foreach(var id in vfc.Features)
+                            {
+                                if(!v.Features.Any(f => f.FeatureId == id))
+                                {
+                                    v.Features.Add(new VehicleFeature { FeatureId = id });
+                                }
+                            }
+                        }
                     );
             }
         );
