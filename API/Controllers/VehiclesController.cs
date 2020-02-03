@@ -36,6 +36,7 @@ namespace API.Controllers
         public async Task<IActionResult> Get(int id)
         {
             var vehicleFromDb = await _dbContext.Vehicles
+                .Include(v => v.Model.Make)
                 .Include(v => v.Features)
                 .FirstOrDefaultAsync(v => v.Id == id);
 
