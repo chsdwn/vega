@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Models
 {
+    [Table("Vehicles")]
     public class Vehicle
     {
         public int Id { get; set; }
@@ -13,9 +16,9 @@ namespace API.Models
         [Required]
         public int ModelId { get; set; }
 
-        public bool VehicleRegistered { get; set; }
+        public bool IsRegistered { get; set; }
 
-        public ICollection<VehicleFeature> VehicleFeatures { get; set; }
+        public ICollection<VehicleFeature> Features { get; set; }
 
         [Required]
         [StringLength(255)]
@@ -25,14 +28,14 @@ namespace API.Models
         [StringLength(255)]
         public string ContactPhone { get; set; }
 
-        [EmailAddress]
+        [StringLength(255)]
         public string ContactEmail { get; set; }
 
         public DateTime LastUpdate { get; set; }
 
         public Vehicle()
         {
-            this.LastUpdate = DateTime.UtcNow;
+            Features = new Collection<VehicleFeature>();
         }
     }
 }
