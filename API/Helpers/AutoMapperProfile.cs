@@ -52,28 +52,16 @@ namespace API.Helpers
                     .AfterMap(
                         (vfc, v) => {
                             // Remove unselected objects
-                            var removedFeatures = new List<VehicleFeature>();
-                            foreach(var feature in v.Features)
-                            {
-                                if(!vfc.Features.Contains(feature.FeatureId))
-                                {
-                                    removedFeatures.Add(feature);
-                                }
-                            }
-
+                            var removedFeatures = v.Features.Where(f => !vfc.Features.Contains(f.FeatureId));
                             foreach(var feature in removedFeatures)
-                            {
                                 v.Features.Remove(feature);
-                            }
 
                             // Add new features
-                            foreach(var id in vfc.Features)
-                            {
-                                if(!v.Features.Any(f => f.FeatureId == id))
-                                {
-                                    v.Features.Add(new VehicleFeature { FeatureId = id });
-                                }
-                            }
+                            var addedFeatures = vfc.Features
+                                .Where(id => !v.Features.Any(f => f.FeatureId == id))
+                                .Select(id => new VehicleFeature { FeatureId = id});
+                            foreach(var feature in addedFeatures)
+                                v.Features.Add(feature);
                         }
                     );
             }
