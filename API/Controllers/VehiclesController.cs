@@ -38,6 +38,10 @@ namespace API.Controllers
             var vehicleFromDb = await _dbContext.Vehicles
                 .Include(v => v.Features)
                 .FirstOrDefaultAsync(v => v.Id == id);
+
+            if(vehicleFromDb == null)
+                return NotFound();
+
             var vehicle = _mapper.Map<VehicleForDetailed>(vehicleFromDb);
             return Ok(vehicle);
         }
@@ -64,6 +68,9 @@ namespace API.Controllers
                 .Include(v => v.Features)
                 .FirstOrDefaultAsync(v => v.Id == id);
 
+            if(vehicleFromDb == null)
+                return NotFound();
+
             _mapper.Map(vehicleForUpdateDto, vehicleFromDb);
             vehicleFromDb.LastUpdate = DateTime.UtcNow;
             
@@ -76,6 +83,10 @@ namespace API.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var vehicle = await _dbContext.Vehicles.FirstOrDefaultAsync(v => v.Id == id);
+
+            if(vehicle == null)
+                return NotFound();
+
             _dbContext.Vehicles.Remove(vehicle);
             await _dbContext.SaveChangesAsync();
 
