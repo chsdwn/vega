@@ -46,8 +46,14 @@ namespace API.Controllers
         public async Task<IActionResult> Create([FromBody]VehicleForCreation vehicleForCreationDto)
         {
             if(!ModelState.IsValid) 
+                return BadRequest(ModelState);
+
+            var model = await _dbContext.Models.FindAsync(vehicleForCreationDto.ModelId);
+            
+            if(model == null)
             {
-                return BadRequest("Invalid vehicle data");
+                ModelState.AddModelError("ModelId", "Invalid model id");
+                return BadRequest(ModelState);
             }
 
             var vehicle = _mapper.Map<Vehicle>(vehicleForCreationDto);
