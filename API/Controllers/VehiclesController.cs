@@ -55,7 +55,11 @@ namespace API.Controllers
             _repo.Add(vehicle);
 
             if(await _repo.SaveAll())
-                return Ok("Vehicle Created");
+            {
+                vehicle = await _repo.Get(vehicle.Id);
+                var vehicleToReturn = _mapper.Map<VehicleForDetailed>(vehicle);
+                return Ok(vehicleToReturn);
+            }
 
             return BadRequest("An error occured while vehicle creating.");
         }
@@ -63,16 +67,20 @@ namespace API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody]VehicleForCreation vehicleForUpdateDto, int id)
         {
-            var vehicleFromDb = await _repo.Get(id);
+            var vehicle = await _repo.Get(id);
 
-            if(vehicleFromDb == null)
+            if(vehicle == null)
                 return NotFound();
 
-            _mapper.Map(vehicleForUpdateDto, vehicleFromDb);
-            vehicleFromDb.LastUpdate = DateTime.UtcNow;
+            _mapper.Map(vehicleForUpdateDto, vehicle);
+            vehicle.LastUpdate = DateTime.UtcNow;
             
             if(await _repo.SaveAll())
-                return Ok("Vehicle succesfully updated.");
+            {
+                vehicle = await _repo.Get(id);
+                var vehicleToReturn = _mapper.Map<VehicleForDetailed>(vehicle);
+                return Ok(vehicleToReturn);
+            }
 
             return BadRequest("An error occured while vehicle updating.");
         }
@@ -80,7 +88,7 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var vehicle = await _repo.Get(id);
+            var vehicle = await _repo.Get(id, includeRelated: false);
 
             if(vehicle == null)
                 return NotFound();

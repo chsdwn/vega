@@ -24,8 +24,11 @@ namespace API.Data
             _dbContext.Vehicles.Remove(vehicle);
         }
 
-        public async Task<Vehicle> Get(int id)
+        public async Task<Vehicle> Get(int id, bool includeRelated = true)
         {
+            if(!includeRelated)
+                return await _dbContext.Vehicles.FindAsync(id);
+
             return await _dbContext.Vehicles
                 .Include(v => v.Model)
                     .ThenInclude(m => m.Make)
@@ -36,7 +39,10 @@ namespace API.Data
 
         public async Task<IEnumerable<Vehicle>> GetAll()
         {
-            return await _dbContext.Vehicles.Include(v => v.Model.Make).ToListAsync();
+            return await _dbContext.Vehicles
+                .Include(v => v.Model)
+                    .ThenInclude(m => m.Make)
+                .ToListAsync();
         }
 
         public async Task<bool> SaveAll()
