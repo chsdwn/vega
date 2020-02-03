@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace API.Models
+namespace API.Core.Models
 {
     public class Feature
     {

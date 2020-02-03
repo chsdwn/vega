@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using API.Data;
 using API.DTOs;
 using API.Helpers;
-using API.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

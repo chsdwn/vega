@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using API.Models;
 
 namespace API.DTOs
 {

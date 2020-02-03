@@ -1,5 +1,5 @@
 using AutoMapper;
-using API.Models;
+using API.Core.Models;
 using API.DTOs;
 using System.Linq;
 using System.Collections.Generic;

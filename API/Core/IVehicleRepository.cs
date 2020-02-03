@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using API.Models;
+using API.Core.Models;
 
-namespace API.Data
+namespace API.Core
 {
     public interface IVehicleRepository
     {

@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace API.Data
+namespace API.Core
 {
     public interface IUnitOfWork
     {
