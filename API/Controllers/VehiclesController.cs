@@ -48,14 +48,6 @@ namespace API.Controllers
             if(!ModelState.IsValid) 
                 return BadRequest(ModelState);
 
-            var model = await _dbContext.Models.FindAsync(vehicleForCreationDto.ModelId);
-            
-            if(model == null)
-            {
-                ModelState.AddModelError("ModelId", "Invalid model id");
-                return BadRequest(ModelState);
-            }
-
             var vehicle = _mapper.Map<Vehicle>(vehicleForCreationDto);
             vehicle.LastUpdate = DateTime.UtcNow;
             _dbContext.Vehicles.Add(vehicle);
