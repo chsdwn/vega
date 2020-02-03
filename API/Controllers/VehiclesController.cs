@@ -58,12 +58,13 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody]VehicleForUpdate vehicleForUpdateDto, int id)
+        public async Task<IActionResult> Update([FromBody]VehicleForCreation vehicleForUpdateDto, int id)
         {
             var vehicleFromDb = await _dbContext.Vehicles.FirstOrDefaultAsync(v => v.Id == id);
             clearFeatures(id);
 
             _mapper.Map(vehicleForUpdateDto, vehicleFromDb);
+            vehicleFromDb.LastUpdate = DateTime.UtcNow;
             
             await _dbContext.SaveChangesAsync();
 

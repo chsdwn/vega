@@ -48,7 +48,6 @@ namespace API.Helpers
                         dest => dest.Features,
                         opt => opt.MapFrom(src => src.Features.Select(id => new VehicleFeature { FeatureId = id }))
                     );
-                cfg.CreateMap<VehicleForUpdate, Vehicle>();
             }
         );
     }
