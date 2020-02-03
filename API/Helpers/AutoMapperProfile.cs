@@ -23,7 +23,23 @@ namespace API.Helpers
                         dest => dest.Model,
                         opt => opt.MapFrom(src => src.Model.Name)
                     );
-                cfg.CreateMap<VehicleForCreation, Vehicle>();
+                cfg.CreateMap<VehicleForCreation, Vehicle>()
+                    .ForMember(
+                        dest => dest.ContactName,
+                        opt => opt.MapFrom(src => src.Contact.Name)
+                    )
+                    .ForMember(
+                        dest => dest.ContactPhone,
+                        opt => opt.MapFrom(src => src.Contact.Phone)
+                    )
+                    .ForMember(
+                        dest => dest.ContactEmail,
+                        opt => opt.MapFrom(src => src.Contact.Email)
+                    )
+                    .ForMember(
+                        dest => dest.Features,
+                        opt => opt.MapFrom(src => src.Features.Select(id => new VehicleFeature { FeatureId = id }))
+                    );
                 cfg.CreateMap<VehicleForUpdate, Vehicle>();
             }
         );
