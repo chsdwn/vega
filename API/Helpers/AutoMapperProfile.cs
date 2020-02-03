@@ -15,8 +15,16 @@ namespace API.Helpers
 
                 cfg.CreateMap<Vehicle, VehicleForDetailed>()
                     .ForMember(
-                        dest => dest.Model,
-                        opt => opt.MapFrom(src => src.Model.Name)
+                        dest => dest.Contact,
+                        opt => opt.MapFrom(src => new ContactResource {
+                            Name = src.ContactName,
+                            Phone = src.ContactPhone,
+                            Email = src.ContactEmail
+                        })
+                    )
+                    .ForMember(
+                        dest => dest.Features,
+                        opt => opt.MapFrom(src => src.Features.Select(vf => vf.FeatureId))
                     );
                 cfg.CreateMap<Vehicle, VehicleForList>()
                     .ForMember(

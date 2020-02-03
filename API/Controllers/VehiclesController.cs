@@ -36,8 +36,7 @@ namespace API.Controllers
         public async Task<IActionResult> Get(int id)
         {
             var vehicleFromDb = await _dbContext.Vehicles
-                .Include(v => v.Model)
-                .Include(v => v.VehicleFeatures)
+                .Include(v => v.Features)
                 .FirstOrDefaultAsync(v => v.Id == id);
             var vehicle = _mapper.Map<VehicleForDetailed>(vehicleFromDb);
             return Ok(vehicle);
@@ -52,7 +51,8 @@ namespace API.Controllers
             }
 
             var vehicle = _mapper.Map<Vehicle>(vehicleForCreationDto);
-            _dbContext.Add(vehicle);
+            vehicle.LastUpdate = DateTime.UtcNow;
+            _dbContext.Vehicles.Add(vehicle);
 
             await _dbContext.SaveChangesAsync();
 
