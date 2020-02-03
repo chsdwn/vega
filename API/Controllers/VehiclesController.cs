@@ -15,19 +15,19 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class VehiclesController : ControllerBase
     {
-        private readonly VegaDbContext _dbContext;
+        private readonly IVehicleRepository _repo;
         private readonly IMapper _mapper;
 
-        public VehiclesController(VegaDbContext dbContext)
+        public VehiclesController(IVehicleRepository repo)
         {
-            _dbContext = dbContext;
+            _repo = repo;
             _mapper = new Mapper(AutoMapperProfile.config);
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var vehicleListFromDb = await _dbContext.Vehicles.Include(v => v.Model).ToListAsync();
+            var vehicleListFromDb = await _repo.GetAll();
             var vehicleList = _mapper.Map<IEnumerable<VehicleForList>>(vehicleListFromDb);
             return Ok(vehicleList);
         }
@@ -35,10 +35,7 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var vehicleFromDb = await _dbContext.Vehicles
-                .Include(v => v.Model.Make)
-                .Include(v => v.Features)
-                .FirstOrDefaultAsync(v => v.Id == id);
+            var vehicleFromDb = await _repo.Get(id);
 
             if(vehicleFromDb == null)
                 return NotFound();
@@ -55,19 +52,18 @@ namespace API.Controllers
 
             var vehicle = _mapper.Map<Vehicle>(vehicleForCreationDto);
             vehicle.LastUpdate = DateTime.UtcNow;
-            _dbContext.Vehicles.Add(vehicle);
+            _repo.Add(vehicle);
 
-            await _dbContext.SaveChangesAsync();
+            if(await _repo.SaveAll())
+                return Ok("Vehicle Created");
 
-            return Ok("Vehicle created");
+            return BadRequest("An error occured while vehicle creating.");
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody]VehicleForCreation vehicleForUpdateDto, int id)
         {
-            var vehicleFromDb = await _dbContext.Vehicles
-                .Include(v => v.Features)
-                .FirstOrDefaultAsync(v => v.Id == id);
+            var vehicleFromDb = await _repo.Get(id);
 
             if(vehicleFromDb == null)
                 return NotFound();
@@ -75,23 +71,26 @@ namespace API.Controllers
             _mapper.Map(vehicleForUpdateDto, vehicleFromDb);
             vehicleFromDb.LastUpdate = DateTime.UtcNow;
             
-            await _dbContext.SaveChangesAsync();
+            if(await _repo.SaveAll())
+                return Ok("Vehicle succesfully updated.");
 
-            return Ok("Vehicle succesfully updated.");
+            return BadRequest("An error occured while vehicle updating.");
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var vehicle = await _dbContext.Vehicles.FirstOrDefaultAsync(v => v.Id == id);
+            var vehicle = await _repo.Get(id);
 
             if(vehicle == null)
                 return NotFound();
 
-            _dbContext.Vehicles.Remove(vehicle);
-            await _dbContext.SaveChangesAsync();
+            _repo.Delete(vehicle);
+            
+            if(await _repo.SaveAll())
+                return Ok($"Vehicle with id: {id} succesfully deleted.");
 
-            return Ok($"Vehicle with id: {id} succesfully deleted.");
+            return BadRequest("An error occured while vehicle deleting.");
         }
     }
 }

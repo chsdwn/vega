@@ -31,6 +31,8 @@ namespace API
         {
             services.AddControllers();
 
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
+
             services.AddAutoMapper(typeof(Startup));
             
             services.AddDbContext<VegaDbContext>(options =>
