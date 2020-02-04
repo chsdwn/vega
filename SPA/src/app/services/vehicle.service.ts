@@ -4,6 +4,7 @@ import { environment } from './../../environments/environment.prod';
 
 import { Make } from '../models/Make';
 import { Feature } from '../models/Feature';
+import { VehicleDetail } from './../models/VehicleDetail';
 import { VehicleList } from './../models/VehicleList';
 
 @Injectable({
@@ -18,6 +19,10 @@ export class VehicleService {
 
   getFeatures() {
     return this.http.get<Feature[]>(environment.apiUrl + 'features');
+  }
+
+  getVehicle(id: number) {
+    return this.http.get<VehicleDetail>(environment.apiUrl + 'vehicles/' + id);
   }
 
   getVehicles() {
