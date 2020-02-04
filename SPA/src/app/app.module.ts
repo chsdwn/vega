@@ -5,17 +5,15 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { VehicleNewComponent } from './vehicles/vehicle-new/vehicle-new.component';
+import { VehiclesComponent } from './vehicles/vehicles.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    VehicleNewComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule,
     HttpClientModule
   ],
   providers: [],
