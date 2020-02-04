@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from './../../environments/environment.prod';
 
+import { KeyValuePair } from './../models/KeyValuePair';
 import { Make } from '../models/Make';
-import { Feature } from '../models/Feature';
 import { VehicleDetail } from './../models/VehicleDetail';
 import { VehicleList } from './../models/VehicleList';
 
@@ -18,7 +18,7 @@ export class VehicleService {
   }
 
   getFeatures() {
-    return this.http.get<Feature[]>(environment.apiUrl + 'features');
+    return this.http.get<KeyValuePair[]>(environment.apiUrl + 'features');
   }
 
   getVehicle(id: number) {

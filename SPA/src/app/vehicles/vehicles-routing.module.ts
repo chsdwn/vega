@@ -13,7 +13,8 @@ const routes: Routes = [
     children: [
       { path: '', component: VehicleHomeComponent},
       { path: 'list', component: VehicleListComponent },
-      { path: 'new', component: VehicleNewComponent }
+      { path: 'new', component: VehicleNewComponent },
+      { path: 'new/:id', component: VehicleNewComponent }
     ]
   }
 ];

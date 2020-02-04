@@ -8,7 +8,7 @@
         name="makes"
         id="makes"
         formControlName="makes"
-        (change)="onMakeChange($event)"
+        (click)="onMakeChange(+$event.target.value)"
         class="vehicle-form__make--dropdown">
         <option *ngFor="let make of makes" [value]="make.id">{{ make.name }}</option>
       </select>
@@ -20,7 +20,6 @@
         name="models"
         id="models"
         formControlName="models"
-        (change)="onModelChange($event)"
         class="vehicle-form__make--dropdown">
         <ng-container *ngIf="models">
           <option *ngFor="let model of models" [value]="model.id">{{ model.name }}</option>
