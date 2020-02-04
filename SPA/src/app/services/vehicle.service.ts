@@ -4,6 +4,7 @@ import { environment } from './../../environments/environment.prod';
 
 import { Make } from '../models/Make';
 import { Feature } from '../models/Feature';
+import { VehicleList } from './../models/VehicleList';
 
 @Injectable({
   providedIn: 'root'
@@ -17,5 +18,9 @@ export class VehicleService {
 
   getFeatures() {
     return this.http.get<Feature[]>(environment.apiUrl + 'features');
+  }
+
+  getVehicles() {
+    return this.http.get<VehicleList[]>(environment.apiUrl + 'vehicles');
   }
 }
