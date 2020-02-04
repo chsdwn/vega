@@ -1,0 +1,33 @@
+.vehicles {
+  display: flex;
+  justify-content: center;
+
+  &-table {
+    border-collapse: collapse;
+  
+    th,
+    td {
+      border: 1px solid grey;
+      padding: 5px;
+    }
+  
+    &__vehicle-row {
+  
+      &:hover {
+        background-color: lightgrey;
+      }
+
+      &--edit {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      &--delete {
+        color: red;
+        font-size: 2rem;
+        font-weight: 700;
+        cursor: pointer;
+      }
+    }
+  }
+}

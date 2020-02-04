@@ -97,7 +97,7 @@ namespace API.Controllers
             _repo.Delete(vehicle);
             
             if(await _unitOfWork.CompleteAsync())
-                return Ok($"Vehicle with id: {id} succesfully deleted.");
+                return Ok(id);
 
             return BadRequest("An error occured while vehicle deleting.");
         }

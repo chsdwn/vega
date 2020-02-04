@@ -23,4 +23,8 @@ export class VehicleService {
   getVehicles() {
     return this.http.get<VehicleList[]>(environment.apiUrl + 'vehicles');
   }
+
+  removeVehicle(id: number) {
+    return this.http.delete(environment.apiUrl + 'vehicles/' + id);
+  }
 }
