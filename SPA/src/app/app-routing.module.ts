@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { NewComponent } from './vehicle/new/new.component';
+import { VehicleNewComponent } from './vehicles/vehicle-new/vehicle-new.component';
 
 
 const routes: Routes = [
@@ -8,7 +8,7 @@ const routes: Routes = [
     path: '', pathMatch: 'full', redirectTo: '/vehicle/new'
   },
   {
-    path: 'vehicle/new', component: NewComponent
+    path: 'vehicle/new', component: VehicleNewComponent
   }
 ];
 

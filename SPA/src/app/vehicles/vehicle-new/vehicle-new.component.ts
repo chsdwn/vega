@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
-import { VehicleService } from './../../services/vehicle.service';
+import { VehicleService } from '../../services/vehicle.service';
 
-import { Make } from 'src/app/models/Make';
-import { Model } from 'src/app/models/Model';
-import { Feature } from './../../models/Feature';
+import { Make } from '../../models/Make';
+import { Model } from '../../models/Model';
+import { Feature } from '../../models/Feature';
 
 @Component({
-  selector: 'app-new',
-  templateUrl: './new.component.html',
-  styleUrls: ['./new.component.scss']
+  selector: 'app-vehicle-new',
+  templateUrl: './vehicle-new.component.html',
+  styleUrls: ['./vehicle-new.component.scss']
 })
-export class NewComponent implements OnInit {
+export class VehicleNewComponent implements OnInit {
   newVehicleForm: FormGroup;
   vehicle: {
     make: number,
