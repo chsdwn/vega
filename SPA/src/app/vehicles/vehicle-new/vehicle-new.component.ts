@@ -93,6 +93,15 @@ export class VehicleNewComponent implements OnInit {
     });
   }
 
+  onFeatureSelect(id: number) {
+    this.features.find(f => {
+      if (f.id === id) {
+        f.selected = !f.selected;
+      }
+    });
+    console.log(this.features);
+  }
+
   onSubmit() {
     if (this.newVehicleForm.valid) {
       const modelId = +this.newVehicleForm.value.vehicleData.models;
@@ -116,7 +125,7 @@ export class VehicleNewComponent implements OnInit {
   }
 
   initFeatures() {
-    if (this.features) {
+    if (this.features && this.vehicle) {
       this.vehicle.features.map(vf => {
         this.features.find(f => {
           if (f.name === vf.name) {
