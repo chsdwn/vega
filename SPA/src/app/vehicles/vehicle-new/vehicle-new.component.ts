@@ -5,8 +5,8 @@ import { VehicleService } from '../../services/vehicle.service';
 
 import { Contact } from './../../models/Contact';
 import { Feature } from './../../models/Feature';
+import { KeyValuePair } from './../../models/KeyValuePair';
 import { Make } from '../../models/Make';
-import { Model } from '../../models/Model';
 import { VehicleCreate } from './../../models/VehicleCreate';
 import { VehicleDetail } from './../../models/VehicleDetail';
 
@@ -20,7 +20,7 @@ export class VehicleNewComponent implements OnInit {
   vehicle: VehicleDetail;
   newVehicleForm: FormGroup;
   makes: Make[];
-  models: Model[];
+  models: KeyValuePair[];
   features: Feature[];
   editMode = false;
 

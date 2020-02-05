@@ -1,11 +1,11 @@
-import { Model } from './Model';
+import { KeyValuePair } from './KeyValuePair';
 
 export class Make {
 
   constructor(
     public id: number,
     public name: string,
-    public models: Model[]
+    public models: KeyValuePair[]
   ) { }
 
 }
