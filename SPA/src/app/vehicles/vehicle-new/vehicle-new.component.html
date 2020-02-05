@@ -8,7 +8,7 @@
         name="makes"
         id="makes"
         formControlName="makes"
-        (click)="onMakeChange(+$event.target.value)"
+        (change)="onMakeChange(+$event.target.value)"
         class="vehicle-form__make--dropdown">
         <option *ngFor="let make of makes" [value]="make.id">{{ make.name }}</option>
       </select>
@@ -83,7 +83,7 @@
       <input type="email" id="contactMail" formControlName="contactMail" class="vehicle-form__contact--input">
     </div>
   </div>
-  <button type="submit" class="vehicle-form__submit">Save</button>
+  <button type="submit" class="vehicle-form__submit" [disabled]="!newVehicleForm.valid">Save</button>
 
 </form>
 </ng-container>

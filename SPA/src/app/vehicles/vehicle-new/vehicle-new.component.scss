@@ -141,5 +141,14 @@
       transform: translateY(8px);
       box-shadow: none;
     }
+
+    &:disabled {
+      box-shadow: none;
+    }
   }
+}
+
+select.ng-invalid.ng-touched,
+input.ng-invalid.ng-touched {
+  border: 2px solid red;
 }
