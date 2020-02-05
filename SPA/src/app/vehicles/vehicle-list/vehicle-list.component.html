@@ -15,7 +15,7 @@
       <td>{{ vehicle.make.name }}</td>
       <td>{{ vehicle.model.name }}</td>
       <td>{{ vehicle.contactName }}</td>
-      <td class="vehicles-table__vehicle-row--edit" [routerLink]="['/vehicles/new', vehicle.id]">Edit</td>
+      <td class="vehicles-table__vehicle-row--edit" [routerLink]="['/vehicles', vehicle.id]">Edit</td>
       <td class="vehicles-table__vehicle-row--delete" (click)="onVehicleDelete(i, vehicle.id)">X</td>
     </tr>
   </table>
