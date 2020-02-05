@@ -3,6 +3,7 @@ import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { VehicleService } from '../../services/vehicle.service';
 
+import { Feature } from './../../models/Feature';
 import { KeyValuePair } from './../../models/KeyValuePair';
 import { Make } from '../../models/Make';
 import { Model } from '../../models/Model';
@@ -14,14 +15,13 @@ import { VehicleDetail } from './../../models/VehicleDetail';
   styleUrls: ['./vehicle-new.component.scss']
 })
 export class VehicleNewComponent implements OnInit {
+  id: number;
+  vehicle: VehicleDetail;
   newVehicleForm: FormGroup;
   makes: Make[];
   models: Model[];
-  features: KeyValuePair[];
-  isFetching = false;
-  id: number;
+  features: Feature[];
   editMode = false;
-  vehicle: VehicleDetail;
 
   constructor(
     private route: ActivatedRoute,
@@ -29,30 +29,28 @@ export class VehicleNewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.isFetching = true;
-    this.vehicleService.getMakes().subscribe(data => {
-      this.makes = data;
-      this.isFetching = false;
-    });
+    this.vehicleService.getMakes().subscribe(makesRes => {
+      this.makes = makesRes;
 
-    this.isFetching = true;
-    this.vehicleService.getFeatures().subscribe(data => {
-      this.features = data;
-      this.isFetching = false;
-    });
+      this.vehicleService.getFeatures().subscribe(featuresRes => {
+        this.features = featuresRes as Feature[];
 
-    this.route.params.subscribe((params: Params) => {
-      this.id = +params.id;
-      this.editMode = params.id != null;
-      this.initVehicle();
+        this.route.params.subscribe((params: Params) => {
+          this.id = +params.id;
+          this.editMode = params.id != null;
+
+          this.vehicleService.getVehicle(this.id).subscribe(vehicleRes => {
+            this.vehicle = vehicleRes;
+            this.createForm();
+          });
+        });
+      });
     });
   }
 
   createForm() {
     if (this.editMode) {
-      // Features area needs to be filled.
-      // const featuresFromAPI = this.vehicle.features;
-      this.onMakeChange(this.vehicle.make.id);
+      this.initFeatures();
 
       this.newVehicleForm = new FormGroup({
         vehicleData: new FormGroup({
@@ -62,9 +60,12 @@ export class VehicleNewComponent implements OnInit {
           contactName: new FormControl(this.vehicle.contact.name),
           contactPhone: new FormControl(this.vehicle.contact.phone),
           contactMail: new FormControl(this.vehicle.contact.email),
-          featureLabels: new FormArray(this.features.map(f => new FormControl(false)))
+          featureLabels: new FormArray(this.features.map(f => new FormControl(f.selected)))
         })
       });
+
+      this.onMakeChange(this.vehicle.make.id);
+
     } else {
       this.newVehicleForm = new FormGroup({
         vehicleData: new FormGroup({
@@ -80,15 +81,6 @@ export class VehicleNewComponent implements OnInit {
     }
   }
 
-  initVehicle() {
-    this.vehicleService.getVehicle(this.id).subscribe(data => {
-      this.vehicle = data;
-      if (!this.isFetching) {
-        this.createForm();
-      }
-    });
-  }
-
   onMakeChange(id: number) {
     if (id) {
       this.models = this.makes.find(m => m.id === id).models;
@@ -97,5 +89,17 @@ export class VehicleNewComponent implements OnInit {
 
   onSubmit() {
     console.log(this.newVehicleForm.value);
+  }
+
+  initFeatures() {
+    if (this.features) {
+      this.vehicle.features.map(vf => {
+        this.features.find(f => {
+          if (f.name === vf.name) {
+            f.selected = true;
+          }
+        });
+      });
+    }
   }
 }

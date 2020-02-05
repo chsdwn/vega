@@ -60,7 +60,7 @@
         <input
           type="checkbox"
           [id]="feature.id"
-          [value]="feature.name.toLowerCase()"
+          [value]="feature.selected"
           [formControlName]="i"
           class="vehicle-form__features--feature-checkbox">
         <label [for]="feature.id" class="vehicle-form__features--feature-title">{{ feature.name }}</label>
