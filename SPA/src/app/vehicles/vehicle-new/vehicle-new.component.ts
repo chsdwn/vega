@@ -3,10 +3,12 @@ import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { VehicleService } from '../../services/vehicle.service';
 
+import { Contact } from './../../models/Contact';
 import { Feature } from './../../models/Feature';
 import { KeyValuePair } from './../../models/KeyValuePair';
 import { Make } from '../../models/Make';
 import { Model } from '../../models/Model';
+import { VehicleCreate } from './../../models/VehicleCreate';
 import { VehicleDetail } from './../../models/VehicleDetail';
 
 @Component({
@@ -39,10 +41,14 @@ export class VehicleNewComponent implements OnInit {
           this.id = +params.id;
           this.editMode = params.id != null;
 
-          this.vehicleService.getVehicle(this.id).subscribe(vehicleRes => {
-            this.vehicle = vehicleRes;
+          if (this.editMode) {
+            this.vehicleService.getVehicle(this.id).subscribe(vehicleRes => {
+              this.vehicle = vehicleRes;
+              this.createForm();
+            });
+          } else {
             this.createForm();
-          });
+          }
         });
       });
     });
@@ -88,7 +94,25 @@ export class VehicleNewComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.newVehicleForm.value);
+    const modelId = +this.newVehicleForm.value.vehicleData.models;
+    const isRegistered = this.newVehicleForm.value.vehicleData.isCarRegistered;
+    const contactName = this.newVehicleForm.value.vehicleData.contactName;
+    const contactEmail = this.newVehicleForm.value.vehicleData.contactMail;
+    const contactPhone = this.newVehicleForm.value.vehicleData.contactPhone;
+
+    const featureIds: number[] = [];
+    this.features.map(f => f.selected === true ? featureIds.push(f.id) : null);
+
+    const contact = new Contact(contactName, contactPhone, contactEmail);
+
+    const createVehicle = new VehicleCreate(
+      modelId,
+      isRegistered,
+      featureIds,
+      contact
+    );
+
+    console.log(createVehicle);
   }
 
   initFeatures() {
