@@ -84,7 +84,15 @@
       <input type="email" id="contactMail" formControlName="contactMail" class="vehicle-form__contact--input">
     </div>
   </div>
-  <button type="submit" class="vehicle-form__submit" [disabled]="!newVehicleForm.valid">Save</button>
+
+  <div class="vehicle-form__actions" [ngStyle]="{'justify-content': editMode ? 'space-between' : 'center'}">
+    <button type="submit" class="vehicle-form__actions--submit" [disabled]="!newVehicleForm.valid">
+      {{ editMode ? 'Update' : 'Save' }}
+    </button>
+    <ng-container *ngIf="editMode">
+      <button class="vehicle-form__actions--delete">Delete</button>
+    </ng-container>
+  </div>
 
 </form>
 </ng-container>
