@@ -115,6 +115,10 @@ export class VehicleNewComponent implements OnInit, OnDestroy {
     console.log(this.features);
   }
 
+  onDelete() {
+    this.createDeleteDialogBox();
+  }
+
   onSubmit() {
     if (this.newVehicleForm.valid) {
       const modelId = +this.newVehicleForm.value.vehicleData.models;
@@ -155,7 +159,7 @@ export class VehicleNewComponent implements OnInit, OnDestroy {
     }
   }
 
-  createAndShowDialogBox(question: string, approveText: string, denyText: string) {
+  createDeleteDialogBox() {
     const dialogBoxComponentFactory
       = this.componentFactoryResolver.resolveComponentFactory(DialogBoxComponent);
 
@@ -163,9 +167,9 @@ export class VehicleNewComponent implements OnInit, OnDestroy {
     hostViewContainerRef.clear();
 
     const componentRef = hostViewContainerRef.createComponent(dialogBoxComponentFactory);
-    componentRef.instance.question = question;
-    componentRef.instance.approveText = approveText;
-    componentRef.instance.denyText = denyText;
+    componentRef.instance.question = 'Are you sure to delete this vehicle?';
+    componentRef.instance.approveText = 'Yes';
+    componentRef.instance.denyText = 'No';
 
     this.dialogBoxComponentSubscription = componentRef.instance.closeDialogBox.subscribe(() => {
       this.dialogBoxComponentSubscription.unsubscribe();
@@ -174,10 +178,14 @@ export class VehicleNewComponent implements OnInit, OnDestroy {
 
     this.dialogBoxComponentSubscription = componentRef.instance.isApproved.subscribe((isApproved: boolean) => {
       if (isApproved) {
-        this.vehicleService.removeVehicle(this.id);
+        this.vehicleService.removeVehicle(this.id).subscribe(res => {
+          this.dialogBoxComponentSubscription.unsubscribe();
+          hostViewContainerRef.clear();
+        });
+      } else {
+        this.dialogBoxComponentSubscription.unsubscribe();
+        hostViewContainerRef.clear();
       }
-      this.dialogBoxComponentSubscription.unsubscribe();
-      hostViewContainerRef.clear();
     });
   }
 }
