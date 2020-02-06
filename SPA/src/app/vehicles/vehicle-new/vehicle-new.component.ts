@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy, ComponentFactoryResolver } from '@angular/core';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { VehicleService } from '../../services/vehicle.service';
 
@@ -32,6 +32,7 @@ export class VehicleNewComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private vehicleService: VehicleService,
     private componentFactoryResolver: ComponentFactoryResolver
   ) { }
@@ -179,8 +180,7 @@ export class VehicleNewComponent implements OnInit, OnDestroy {
     this.dialogBoxComponentSubscription = componentRef.instance.isApproved.subscribe((isApproved: boolean) => {
       if (isApproved) {
         this.vehicleService.removeVehicle(this.id).subscribe(res => {
-          this.dialogBoxComponentSubscription.unsubscribe();
-          hostViewContainerRef.clear();
+          this.router.navigate(['../', 'list'], { relativeTo: this.route });
         });
       } else {
         this.dialogBoxComponentSubscription.unsubscribe();
