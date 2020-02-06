@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ComponentFactoryResolver } from '@angular/core';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { VehicleService } from '../../services/vehicle.service';
+
+import { DialogBoxComponent } from './../../shared/dialog-box/dialog-box.component';
+import { PlaceholderDirective } from './../../shared/placeholder.directive';
 
 import { Contact } from './../../models/Contact';
 import { Feature } from './../../models/Feature';
@@ -15,7 +19,8 @@ import { VehicleDetail } from './../../models/VehicleDetail';
   templateUrl: './vehicle-new.component.html',
   styleUrls: ['./vehicle-new.component.scss']
 })
-export class VehicleNewComponent implements OnInit {
+export class VehicleNewComponent implements OnInit, OnDestroy {
+  @ViewChild(PlaceholderDirective, { static: true }) dialogBoxHost: PlaceholderDirective;
   id: number;
   vehicle: VehicleDetail;
   newVehicleForm: FormGroup;
@@ -23,10 +28,12 @@ export class VehicleNewComponent implements OnInit {
   models: KeyValuePair[];
   features: Feature[];
   editMode = false;
+  private dialogBoxComponentSubscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
-    private vehicleService: VehicleService
+    private vehicleService: VehicleService,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) { }
 
   ngOnInit() {
@@ -51,6 +58,12 @@ export class VehicleNewComponent implements OnInit {
         });
       });
     });
+  }
+
+  ngOnDestroy() {
+    if (this.dialogBoxComponentSubscription) {
+      this.dialogBoxComponentSubscription.unsubscribe();
+    }
   }
 
   createForm() {
@@ -140,5 +153,31 @@ export class VehicleNewComponent implements OnInit {
     if (id) {
       this.models = this.makes.find(m => m.id === id).models;
     }
+  }
+
+  createAndShowDialogBox(question: string, approveText: string, denyText: string) {
+    const dialogBoxComponentFactory
+      = this.componentFactoryResolver.resolveComponentFactory(DialogBoxComponent);
+
+    const hostViewContainerRef = this.dialogBoxHost.viewContainerRef;
+    hostViewContainerRef.clear();
+
+    const componentRef = hostViewContainerRef.createComponent(dialogBoxComponentFactory);
+    componentRef.instance.question = question;
+    componentRef.instance.approveText = approveText;
+    componentRef.instance.denyText = denyText;
+
+    this.dialogBoxComponentSubscription = componentRef.instance.closeDialogBox.subscribe(() => {
+      this.dialogBoxComponentSubscription.unsubscribe();
+      hostViewContainerRef.clear();
+    });
+
+    this.dialogBoxComponentSubscription = componentRef.instance.isApproved.subscribe((isApproved: boolean) => {
+      if (isApproved) {
+        this.vehicleService.removeVehicle(this.id);
+      }
+      this.dialogBoxComponentSubscription.unsubscribe();
+      hostViewContainerRef.clear();
+    });
   }
 }

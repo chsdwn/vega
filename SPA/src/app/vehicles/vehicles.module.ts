@@ -8,19 +8,27 @@ import { VehiclesComponent } from './vehicles.component';
 import { VehicleHomeComponent } from './vehicle-home/vehicle-home.component';
 import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
 import { VehicleNewComponent } from './vehicle-new/vehicle-new.component';
+import { DialogBoxComponent } from './../shared/dialog-box/dialog-box.component';
+
+import { PlaceholderDirective } from './../shared/placeholder.directive';
 
 @NgModule({
   declarations: [
     VehiclesComponent,
     VehicleHomeComponent,
     VehicleListComponent,
-    VehicleNewComponent
+    VehicleNewComponent,
+    DialogBoxComponent,
+    PlaceholderDirective
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
     VehiclesRoutingModule
+  ],
+  entryComponents: [
+    DialogBoxComponent
   ]
 })
 export class VehiclesModule {}
