@@ -91,7 +91,7 @@
       {{ editMode ? 'Update' : 'Save' }}
     </button>
     <ng-container *ngIf="editMode">
-      <button class="vehicle-form__actions--delete" (click)="onDelete()">Delete</button>
+      <button type="button" class="vehicle-form__actions--delete" (click)="onDelete()">Delete</button>
     </ng-container>
   </div>
 
