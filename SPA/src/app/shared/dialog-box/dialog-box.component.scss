@@ -1,0 +1,94 @@
+.backdrop {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  background-color: rgba(0,0,0,.5);
+  z-index: 10;
+}
+
+.dialog-box {
+  position: absolute;
+  top: calc((100vh - 20rem) / 2);
+  left: calc((100vw - 45rem) / 2);
+  background-color: rgba(0,0,0,0);
+  z-index: 11;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__container {
+    height: 20rem;
+    width: 45rem;
+    background-color: white;
+    border-radius: 3px;
+    box-shadow: 0px 5px 5px 2px rgba(0,0,0,.5);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &--question {
+      font-size: 2.2rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+
+    &--actions {
+      width: 25rem;
+      text-align: center;
+      margin-top: 1.5rem;
+
+      display: flex;
+      justify-content: space-between;
+
+      &-approve {
+        background-color: green;
+        color: white;
+        font-size: 1.8rem;
+        width: 10rem;
+        height: 4rem;
+        border-radius: 3px;
+        border: 1px solid white;
+        box-shadow: 0px 3px 3px grey;
+        outline: none;
+
+        transition: all .15s;
+
+        &:hover {
+          background-color: #28b328;
+        }
+
+        &:active {
+          transform: translateY(3px);
+          box-shadow: none;
+        }
+      }
+      
+      &-deny {
+        background-color: red;
+        color: white;
+        font-size: 1.8rem;
+        width: 10rem;
+        height: 4rem;
+        border-radius: 3px;
+        border: 1px solid white;
+        box-shadow: 0px 3px 3px grey;
+        outline: none;
+
+        transition: all .15s;
+
+        &:hover {
+          background-color: #ff5858;
+        }
+
+        &:active {
+          transform: translateY(3px);
+          box-shadow: none;
+        }
+      }
+    }
+  }
+}

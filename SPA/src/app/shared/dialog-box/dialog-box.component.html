@@ -1,0 +1,18 @@
+<div class="backdrop" (click)="onClose()"></div>
+<div class="dialog-box">
+  <div class="dialog-box__container">
+    <p class="dialog-box__container--question">
+      {{ question }}
+    </p>
+
+    <div class="dialog-box__container--actions">
+      <button class="dialog-box__container--actions-approve" (click)="onApprove()">
+        {{ approveText }}
+      </button>
+
+      <button class="dialog-box__container--actions-deny" (click)="onDeny()">
+        {{ denyText }}
+      </button>
+    </div>
+  </div>
+</div>
