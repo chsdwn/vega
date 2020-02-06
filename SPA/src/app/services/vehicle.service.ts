@@ -4,6 +4,7 @@ import { environment } from './../../environments/environment.prod';
 
 import { KeyValuePair } from './../models/KeyValuePair';
 import { Make } from '../models/Make';
+import { VehicleCreate } from './../models/VehicleCreate';
 import { VehicleDetail } from './../models/VehicleDetail';
 import { VehicleList } from './../models/VehicleList';
 
@@ -19,6 +20,14 @@ export class VehicleService {
 
   getFeatures() {
     return this.http.get<KeyValuePair[]>(environment.apiUrl + 'features');
+  }
+
+  addVehicle(vehicle: VehicleCreate) {
+    return this.http.post(environment.apiUrl + 'vehicles', vehicle);
+  }
+
+  updateVehicle(vehicle: VehicleCreate, id: number) {
+    return this.http.put(environment.apiUrl + 'vehicles/' + id, vehicle);
   }
 
   getVehicle(id: number) {

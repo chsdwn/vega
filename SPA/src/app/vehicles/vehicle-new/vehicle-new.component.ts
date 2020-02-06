@@ -113,7 +113,6 @@ export class VehicleNewComponent implements OnInit, OnDestroy {
         f.selected = !f.selected;
       }
     });
-    console.log(this.features);
   }
 
   onDelete() {
@@ -139,6 +138,16 @@ export class VehicleNewComponent implements OnInit, OnDestroy {
         featureIds,
         contact
       );
+
+      if (this.editMode) {
+        this.vehicleService.updateVehicle(createVehicle, this.id).subscribe(res => {
+          this.router.navigate(['../', 'list'], { relativeTo: this.route });
+        });
+      } else {
+        this.vehicleService.addVehicle(createVehicle).subscribe(res => {
+          this.router.navigate(['../', 'list'], { relativeTo: this.route });
+        });
+      }
     }
   }
 
