@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, OnDestroy, ComponentFactoryResolver } from '@angular/core';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { VehicleService } from '../../services/vehicle.service';
 
 import { DialogBoxComponent } from './../../shared/dialog-box/dialog-box.component';
@@ -35,29 +35,39 @@ export class VehicleNewComponent implements OnInit, OnDestroy {
     private router: Router,
     private vehicleService: VehicleService,
     private componentFactoryResolver: ComponentFactoryResolver
-  ) { }
+  ) {
+    this.route.params.subscribe((params: Params) => {
+      this.id = +params.id;
+      this.editMode = params.id != null;
+    });
+  }
 
   ngOnInit() {
-    this.vehicleService.getMakes().subscribe(makesRes => {
-      this.makes = makesRes;
+    const sources: any = [
+      this.vehicleService.getMakes(),
+      this.vehicleService.getFeatures(),
+      this.vehicleService.getVehicle(this.id)
+    ];
 
-      this.vehicleService.getFeatures().subscribe(featuresRes => {
-        this.features = featuresRes as Feature[];
+    if (!this.editMode) {
+      sources.splice(2, 1);
+    }
 
-        this.route.params.subscribe((params: Params) => {
-          this.id = +params.id;
-          this.editMode = params.id != null;
-
-          if (this.editMode) {
-            this.vehicleService.getVehicle(this.id).subscribe(vehicleRes => {
-              this.vehicle = vehicleRes;
-              this.createForm();
-            });
-          } else {
-            this.createForm();
-          }
-        });
-      });
+    forkJoin(
+      sources
+    ).subscribe(([makes, features, vehicle]: [Make[], Feature[], VehicleDetail]) => {
+      this.makes = makes;
+      this.features = features as Feature[];
+      if (this.id) {
+        this.vehicle = vehicle;
+      }
+      this.createForm();
+    }, err => {
+      if (err.status === 404) {
+        this.router.navigate(['/vehicles']);
+      } else {
+        throw err;
+      }
     });
   }
 

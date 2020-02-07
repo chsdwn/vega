@@ -19,10 +19,8 @@ export class AppErrorHandler implements ErrorHandler {
   handleError(error: any): void {
     if (!isDevMode()) {
       const eventId = Sentry.captureException(error.originalError || error);
-    } else {
-      throw error;
+      // Sentry.showReportDialog({ eventId });
     }
-    // Sentry.showReportDialog({ eventId });
 
     // This code puts in a zone. When a code runs in Zone, Angular runs it before changed detection.
     this.ngZone.run(() => {
