@@ -8,19 +8,38 @@
       <option *ngFor="let make of makes" [value]="make.id">{{ make.name }}</option>
     </select>
   </div>
-  <table class="vehicles__table">
-    <tr>
-      <th>ID</th>
-      <th (click)="onSortByMake()">Make</th>
-      <th (click)="onSortByModel()">Model</th>
-      <th (click)="onSortByContactName()">Contact Name</th>
-    </tr>
-    <tr 
-      *ngFor="let vehicle of filteredVehicles; let i = index" 
-      class="vehicles__table--vehicle-row" (click)="onVehicleView(vehicle.id)">
-      <td>{{ vehicle.id }}</td>
-      <td>{{ vehicle.make.name }}</td>
-      <td>{{ vehicle.model.name }}</td>
-      <td>{{ vehicle.contactName }}</td>
-  </table>
+
+  <div class="vehicles__table">
+      <h2 class="vehicles__table--id">ID</h2>
+      <h2 class="vehicles__table--make" (click)="onSortByMake()">
+        Make
+        <img 
+          *ngIf="isSorted[0] !== null"
+          [src]="isSorted[0] ? '../../../assets/svg/sort-asc.svg' : '../../../assets/svg/sort-desc.svg'"
+          class="vehicles__table--sort">
+      </h2>
+      <h2 class="vehicles__table--model" (click)="onSortByModel()">
+        Model
+        <img 
+          *ngIf="isSorted[1] !== null"
+          [src]="isSorted[1] ? '../../../assets/svg/sort-asc.svg' : '../../../assets/svg/sort-desc.svg'"
+          class="vehicles__table--sort">
+      </h2>
+      <h2 class="vehicles__table--name" (click)="onSortByContactName()">
+        Name
+        <img 
+          *ngIf="isSorted[2] !== null"
+          [src]="isSorted[2] ? '../../../assets/svg/sort-asc.svg' : '../../../assets/svg/sort-desc.svg'"
+          class="vehicles__table--sort">
+      </h2>
+      
+      <p class="vehicles__table--view">&nbsp;</p>
+      <ng-container class="vehicles__table--row" *ngFor="let vehicle of filteredVehicles">
+        <p>{{ vehicle.id }}</p>
+        <p>{{ vehicle.make.name }}</p>
+        <p>{{ vehicle.model.name }}</p>
+        <p>{{ vehicle.contactName }}</p>
+        <button type="button" class="vehicles__table--view-btn">View/Edit</button>
+      </ng-container>
+  </div>
 </div>

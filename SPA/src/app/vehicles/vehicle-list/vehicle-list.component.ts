@@ -16,7 +16,7 @@ export class VehicleListComponent implements OnInit {
   filteredVehicles: VehicleList[];
   sortedVehicles: VehicleList[];
   makes: Make[];
-  isSorted: boolean[] = [false, false, false];
+  isSorted: boolean[] = [null, null, null];
 
   constructor(
     private router: Router,
@@ -73,8 +73,8 @@ export class VehicleListComponent implements OnInit {
       this.isSorted[0] = false;
     }
 
-    this.isSorted[1] = false;
-    this.isSorted[2] = false;
+    this.isSorted[1] = null;
+    this.isSorted[2] = null;
   }
 
   private sortByModel() {
@@ -86,8 +86,8 @@ export class VehicleListComponent implements OnInit {
       this.isSorted[1] = false;
     }
 
-    this.isSorted[0] = false;
-    this.isSorted[2] = false;
+    this.isSorted[0] = null;
+    this.isSorted[2] = null;
   }
 
   private sortByContactName() {
@@ -99,8 +99,8 @@ export class VehicleListComponent implements OnInit {
       this.isSorted[2] = false;
     }
 
-    this.isSorted[0] = false;
-    this.isSorted[1] = false;
+    this.isSorted[0] = null;
+    this.isSorted[1] = null;
   }
 
   private compareNames(name1: string, name2: string) {

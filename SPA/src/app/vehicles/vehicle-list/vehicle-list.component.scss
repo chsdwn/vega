@@ -4,17 +4,21 @@
   align-items: center;
 
   &__make-filter {
-    margin-top: 2rem;
+    margin-top: 2.2rem;
+    margin-left: 3rem;
+    align-self: flex-start;
 
     display: flex;
+    align-items: center;
 
     &--title {
-      font-size: 2rem;
+      font-size: 2.5rem;
       margin-right: 1rem;
     }
     
     &--makes {
       width: 15rem;
+      padding: 2px 5px;
       border: 1px solid grey;
       border-radius: 3px;
       font-size: 1.8rem;
@@ -22,27 +26,71 @@
   }
 
   &__table {
-    margin-top: 2rem;
-    border-collapse: collapse;
-  
-    th,
-    td {
-      border: 1px solid grey;
-      padding: 5px;
-    }
-  
-    &--vehicle-row {
-      cursor: pointer;
-  
-      &:hover {
-        background-color: lightgrey;
-      }
+    margin: 2rem 1rem;
+    font-size: 2rem;
 
-      &-edit {
-        text-decoration: underline;
-        font-style: italic;
-        cursor: pointer;
-      }
+    display: grid;
+    grid-template-columns:
+      [id-start] 5rem
+      [id-end make-start] minmax(10rem, 15rem)
+      [make-end model-start] minmax(15rem, 1fr)
+      [model-end name-start] minmax(20rem, 1fr)
+      [name-end view-start] min-content [view-end];
+    grid-gap: 1rem;
+
+    &--id {
+      font-size: 2.5rem;
+      font-weight: 700;
+
+      grid-column: id-start / id-end;
+    }
+
+    &--make {
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+
+      grid-column: make-start / make-end;
+    }
+
+    &--model {
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+
+      grid-column: model-start / model-end;
+    }
+
+    &--name {
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+
+      grid-column: name-start / name-end;
+    }
+
+    &--view {
+      font-size: 2.5rem;
+      font-weight: 700;
+
+      grid-column: view-start / view-end;
+    }
+
+    &--sort {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    &--view-btn {
+      border: none;
+      background-color: rgba(0,0,0,0);
+      text-decoration: underline;
+      font-style: italic;
+      font-size: 2rem;
+      cursor: pointer;
     }
   }
 }
