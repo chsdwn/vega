@@ -18,10 +18,4 @@ export class VehicleListComponent implements OnInit {
       this.vehicles = data;
     });
   }
-
-  onVehicleDelete(index: number, id: number) {
-    this.vehicleService.removeVehicle(id).subscribe(res => {
-      this.vehicles.splice(index, 1);
-    });
-  }
 }

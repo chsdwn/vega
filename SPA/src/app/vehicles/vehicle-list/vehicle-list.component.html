@@ -6,7 +6,6 @@
       <th>Model</th>
       <th>Contact Name</th>
       <th>&nbsp;</th>
-      <th>&nbsp;</th>
     </tr>
     <tr 
       *ngFor="let vehicle of vehicles; let i = index" 
@@ -16,7 +15,5 @@
       <td>{{ vehicle.model.name }}</td>
       <td>{{ vehicle.contactName }}</td>
       <td class="vehicles-table__vehicle-row--edit" [routerLink]="['/vehicles', vehicle.id]">Edit</td>
-      <td class="vehicles-table__vehicle-row--delete" (click)="onVehicleDelete(i, vehicle.id)">X</td>
-    </tr>
   </table>
 </div>
