@@ -1,4 +1,4 @@
-import { ErrorHandler, Inject, NgZone, Injectable } from '@angular/core';
+import { ErrorHandler, Inject, NgZone, Injectable, isDevMode } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 
 import * as Sentry from '@sentry/browser';
@@ -17,7 +17,11 @@ export class AppErrorHandler implements ErrorHandler {
   ) { }
 
   handleError(error: any): void {
-    const eventId = Sentry.captureException(error.originalError || error);
+    if (!isDevMode()) {
+      const eventId = Sentry.captureException(error.originalError || error);
+    } else {
+      throw error;
+    }
     // Sentry.showReportDialog({ eventId });
 
     // This code puts in a zone. When a code runs in Zone, Angular runs it before changed detection.
