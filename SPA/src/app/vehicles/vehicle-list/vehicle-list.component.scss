@@ -1,8 +1,27 @@
 .vehicles {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 
-  &-table {
+  &__make-filter {
+    margin-top: 2rem;
+
+    display: flex;
+
+    &--title {
+      font-size: 2rem;
+      margin-right: 1rem;
+    }
+    
+    &--makes {
+      width: 15rem;
+      border: 1px solid grey;
+      border-radius: 3px;
+      font-size: 1.8rem;
+    }
+  }
+
+  &__table {
     margin-top: 2rem;
     border-collapse: collapse;
   
@@ -12,21 +31,16 @@
       padding: 5px;
     }
   
-    &__vehicle-row {
+    &--vehicle-row {
+      cursor: pointer;
   
       &:hover {
         background-color: lightgrey;
       }
 
-      &--edit {
+      &-edit {
         text-decoration: underline;
-        cursor: pointer;
-      }
-
-      &--delete {
-        color: red;
-        font-size: 2rem;
-        font-weight: 700;
+        font-style: italic;
         cursor: pointer;
       }
     }
