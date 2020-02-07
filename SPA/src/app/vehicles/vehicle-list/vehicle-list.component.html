@@ -11,9 +11,9 @@
   <table class="vehicles__table">
     <tr>
       <th>ID</th>
-      <th>Make</th>
-      <th>Model</th>
-      <th>Contact Name</th>
+      <th (click)="onSortByMake()">Make</th>
+      <th (click)="onSortByModel()">Model</th>
+      <th (click)="onSortByContactName()">Contact Name</th>
     </tr>
     <tr 
       *ngFor="let vehicle of filteredVehicles; let i = index" 

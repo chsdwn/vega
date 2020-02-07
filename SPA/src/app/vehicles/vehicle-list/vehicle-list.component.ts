@@ -14,7 +14,9 @@ import { Router } from '@angular/router';
 export class VehicleListComponent implements OnInit {
   vehicles: VehicleList[];
   filteredVehicles: VehicleList[];
+  sortedVehicles: VehicleList[];
   makes: Make[];
+  isSorted: boolean[] = [false, false, false];
 
   constructor(
     private router: Router,
@@ -48,5 +50,69 @@ export class VehicleListComponent implements OnInit {
         this.filteredVehicles.push(v);
       }
     });
+  }
+
+  onSortByMake() {
+    this.sortByMake();
+  }
+
+  onSortByModel() {
+    this.sortByModel();
+  }
+
+  onSortByContactName() {
+    this.sortByContactName();
+  }
+
+  private sortByMake() {
+    if (!this.isSorted[0]) {
+      this.filteredVehicles.sort((v1, v2) => this.compareNames(v1.make.name, v2.make.name));
+      this.isSorted[0] = true;
+    } else {
+      this.filteredVehicles.reverse();
+      this.isSorted[0] = false;
+    }
+
+    this.isSorted[1] = false;
+    this.isSorted[2] = false;
+  }
+
+  private sortByModel() {
+    if (!this.isSorted[1]) {
+      this.filteredVehicles.sort((v1, v2) => this.compareNames(v1.model.name, v2.model.name));
+      this.isSorted[1] = true;
+    } else {
+      this.filteredVehicles.reverse();
+      this.isSorted[1] = false;
+    }
+
+    this.isSorted[0] = false;
+    this.isSorted[2] = false;
+  }
+
+  private sortByContactName() {
+    if (!this.isSorted[2]) {
+      this.filteredVehicles.sort((v1, v2) => this.compareNames(v1.contactName, v2.contactName));
+      this.isSorted[2] = true;
+    } else {
+      this.filteredVehicles.reverse();
+      this.isSorted[2] = false;
+    }
+
+    this.isSorted[0] = false;
+    this.isSorted[1] = false;
+  }
+
+  private compareNames(name1: string, name2: string) {
+    name1 = name1.toLowerCase();
+    name2 = name2.toLowerCase();
+    if (name1 < name2) {
+      return -1;
+    }
+    if (name1 > name2) {
+      return 1;
+    }
+
+    return 0;
   }
 }
