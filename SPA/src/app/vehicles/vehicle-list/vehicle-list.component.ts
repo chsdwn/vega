@@ -56,12 +56,10 @@ export class VehicleListComponent implements OnInit {
       return;
     }
 
-    this.filteredVehicles = [];
-    this.vehicles.find(v => {
-      if (v.make.id === id) {
-        this.filteredVehicles.push(v);
-      }
-    });
+    const make = this.makes.find(m => m.id === id);
+    this.vehicleService.filterVehiclesByMake({ id: make.id, name: make.name }).subscribe(data => {
+      this.filteredVehicles = data;
+    })
   }
 
   onSortByMake() {
