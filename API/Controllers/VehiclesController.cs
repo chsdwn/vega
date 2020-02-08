@@ -124,5 +124,13 @@ namespace API.Controllers
             var count = await _repo.GetCount();
             return Ok(count);
         }
+
+        [HttpPost("filterByMake")]
+        public async Task<IActionResult> FilterByMake([FromBody]KeyValuePairResource make)
+        {
+            var vehicles = await _repo.FilterByMake(make);
+            var vehicleList = _mapper.Map<IEnumerable<VehicleForList>>(vehicles);
+            return Ok(vehicleList);
+        }
     }
 }

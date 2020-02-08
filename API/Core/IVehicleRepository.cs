@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Core.Models;
+using API.DTOs;
 using API.Helpers;
 
 namespace API.Core
@@ -15,5 +16,6 @@ namespace API.Core
         Task<IEnumerable<Vehicle>> Sort(string sortOrder);
         Task<IEnumerable<Vehicle>> GetPage(int pageSize, int pageNumber);
         Task<int> GetCount();
+        Task<IEnumerable<Vehicle>> FilterByMake(KeyValuePairResource make);
     }
 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using API.Core;
 using API.Core.Models;
 using API.Helpers;
+using API.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -93,6 +94,15 @@ namespace API.Data
         {
             var count = await _dbContext.Vehicles.CountAsync();
             return count;
+        }
+
+        public async Task<IEnumerable<Vehicle>> FilterByMake(KeyValuePairResource make)
+        {
+            var vehicles = await _dbContext.Vehicles
+                .Include(v => v.Model)
+                    .ThenInclude(m => m.Make)
+                .Where(v => v.Model.Make.Id == make.Id).ToListAsync();
+            return vehicles;
         }
     }
 }
