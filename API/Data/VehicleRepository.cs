@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Core;
 using API.Core.Models;
+using API.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -77,6 +78,21 @@ namespace API.Data
             }
 
             return vehicles;
+        }
+
+        public async Task<IEnumerable<Vehicle>> GetPage(int pageSize, int pageNumber)
+        {
+            var vehicles = _dbContext.Vehicles
+                .Include(v => v.Model)
+                    .ThenInclude(m => m.Make)
+                .AsNoTracking();
+            return await PaginatedList<Vehicle>.CreateAsync(vehicles, pageNumber, pageSize);
+        }
+
+        public async Task<int> GetCount()
+        {
+            var count = await _dbContext.Vehicles.CountAsync();
+            return count;
         }
     }
 }

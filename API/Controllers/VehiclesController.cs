@@ -108,5 +108,19 @@ namespace API.Controllers
             var vehicles = await _repo.Sort(sortOrder);
             return Ok(vehicles);
         }
+
+        [HttpPost("page/{pageNumber}/size/{pageSize}")]
+        public async Task<IActionResult> GetPage(int pageNumber, int pageSize)
+        {
+            var vehicles = await _repo.GetPage(pageSize, pageNumber);
+            return Ok(vehicles);
+        }
+
+        [HttpGet("count")]
+        public async Task<IActionResult> GetCount()
+        {
+            var count = await _repo.GetCount();
+            return Ok(count);
+        }
     }
 }
