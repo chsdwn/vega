@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { environment } from './../../environments/environment.prod';
 
 import { KeyValuePair } from './../models/KeyValuePair';
@@ -38,7 +39,27 @@ export class VehicleService {
     return this.http.get<VehicleList[]>(environment.apiUrl + 'vehicles');
   }
 
+  getVehiclesCount() {
+    return this.http.get<number>(environment.apiUrl + 'vehicles/count');
+  }
+
+  getVehiclePage(pageNumber: number, pageSize: number) {
+    return this.http
+      .post(
+        environment.apiUrl 
+        + 'vehicles/page/' 
+        + pageNumber 
+        + '/size/' 
+        + pageSize
+        , null
+      ) as Observable<VehicleList[]>;
+  }
+
   removeVehicle(id: number) {
     return this.http.delete(environment.apiUrl + 'vehicles/' + id);
+  }
+
+  sortVehicles(sortOrder: string) {
+    return this.http.post(environment.apiUrl + 'vehicles/sort/' + sortOrder, null) as Observable<VehicleList[]>;
   }
 }
