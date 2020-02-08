@@ -101,5 +101,12 @@ namespace API.Controllers
 
             return BadRequest("An error occured while vehicle deleting.");
         }
+
+        [HttpPost("{sortOrder}")]
+        public async Task<IActionResult> SortByMake(string sortOrder)
+        {
+            var vehicles = await _repo.Sort(sortOrder);
+            return Ok(vehicles);
+        }
     }
 }

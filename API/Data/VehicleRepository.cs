@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Core;
 using API.Core.Models;
@@ -44,6 +45,38 @@ namespace API.Data
                 .Include(v => v.Model)
                     .ThenInclude(m => m.Make)
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Vehicle>> Sort(string sortOrder)
+        {
+            var vehicles = await GetAll();
+
+            switch (sortOrder)
+            {
+                case "make":
+                    vehicles = vehicles.OrderBy(v => v.Model.Make.Name);
+                    break;
+                case "make_desc":
+                    vehicles = vehicles.OrderByDescending(v => v.Model.Make.Name);
+                    break;
+                case "model":
+                    vehicles = vehicles.OrderBy(v => v.Model.Name);
+                    break;
+                case "model_desc":
+                    vehicles = vehicles.OrderByDescending(v => v.Model.Name);
+                    break;
+                case "name":
+                    vehicles = vehicles.OrderBy(v => v.ContactName);
+                    break;
+                case "name_desc":
+                    vehicles = vehicles.OrderByDescending(v => v.ContactName);
+                    break;
+                default:
+                    vehicles = vehicles.OrderBy(v => v.Id);
+                    break;
+            }
+
+            return vehicles;
         }
     }
 }
