@@ -55,6 +55,10 @@ export class VehicleService {
       ) as Observable<VehicleList[]>;
   }
 
+  filterVehiclesByMake(make: KeyValuePair) {
+    return this.http.post(environment.apiUrl + 'vehicles/filterByMake', make) as Observable<VehicleList[]>;
+  }
+
   removeVehicle(id: number) {
     return this.http.delete(environment.apiUrl + 'vehicles/' + id);
   }
