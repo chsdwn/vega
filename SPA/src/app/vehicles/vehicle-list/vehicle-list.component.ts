@@ -17,6 +17,12 @@ export class VehicleListComponent implements OnInit {
   sortedVehicles: VehicleList[];
   makes: Make[];
   isSorted: boolean[] = [null, null, null];
+  vehiclesCount: number;
+  pageNumber: number;
+  pageSize: number;
+  pagesCount: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
 
   constructor(
     private router: Router,
@@ -24,13 +30,19 @@ export class VehicleListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.pageSize = 2;
+    this.pageNumber = 1;
+
     forkJoin(
-      this.vehicleService.getVehicles(),
-      this.vehicleService.getMakes()
-    ).subscribe(([vehicles, makes]) => {
+      this.vehicleService.getVehiclePage(this.pageNumber, this.pageSize),
+      this.vehicleService.getMakes(),
+      this.vehicleService.getVehiclesCount()
+    ).subscribe(([vehicles, makes, count]) => {
       this.vehicles = vehicles;
       this.filteredVehicles = vehicles;
       this.makes = makes;
+      this.vehiclesCount = count;
+      this.calculatePages();
     });
   }
 
@@ -62,6 +74,32 @@ export class VehicleListComponent implements OnInit {
 
   onSortByContactName() {
     this.sortByContactName();
+  }
+
+  onNextPage() {
+    if (this.pagesCount > this.pageNumber) {
+      this.pageNumber++;
+      this.vehicleService.getVehiclePage(this.pageNumber, this.pageSize).subscribe(data => {
+        this.filteredVehicles = data;
+        this.calculatePages();
+      });
+    }
+  }
+
+  onPreviousPage() {
+    if (this.pageNumber > 1) {
+      this.pageNumber--;
+      this.vehicleService.getVehiclePage(this.pageNumber, this.pageSize).subscribe(data => {
+        this.filteredVehicles = data;
+        this.calculatePages();
+      });
+    }
+  }
+
+  private calculatePages() {
+    this.pagesCount = Math.ceil(this.vehiclesCount / this.pageSize);
+    this.hasNextPage = this.pagesCount > this.pageNumber;
+    this.hasPreviousPage = this.pagesCount > 1 && this.pageNumber !== 1;
   }
 
   private sortByMake() {

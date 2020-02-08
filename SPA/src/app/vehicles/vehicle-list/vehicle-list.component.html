@@ -39,7 +39,25 @@
         <p>{{ vehicle.make.name }}</p>
         <p>{{ vehicle.model.name }}</p>
         <p>{{ vehicle.contactName }}</p>
-        <button type="button" class="vehicles__table--view-btn">View/Edit</button>
+        <button type="button" class="vehicles__table--view-btn" (click)="onVehicleView(vehicle.id)">View/Edit</button>
       </ng-container>
+  </div>
+
+  <div class="vehicles__pagination">
+    <button 
+      class="vehicles__pagination--prev" 
+      [ngStyle]="{'visibility': hasPreviousPage ? 'visible' : 'hidden'}" 
+      (click)="onPreviousPage()">
+      <img src="../../../assets/svg/sort-asc.svg" class="vehicles__pagination--prev-icon">
+      <span class="vehicles__pagination--prev-index">{{ pageNumber - 1 }}</span>
+    </button>
+    <span class="vehicles__pagination--page-number">{{ pageNumber }}</span>
+    <button 
+      class="vehicles__pagination--next" 
+      [ngStyle]="{'visibility': hasNextPage ? 'visible' : 'hidden'}"
+      (click)="onNextPage()">
+      <span class="vehicles__pagination--next-index">{{ pageNumber + 1 }}</span>
+      <img src="../../../assets/svg/sort-asc.svg" class="vehicles__pagination--next-icon">
+    </button>
   </div>
 </div>
