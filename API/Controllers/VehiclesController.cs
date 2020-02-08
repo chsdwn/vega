@@ -106,14 +106,16 @@ namespace API.Controllers
         public async Task<IActionResult> Sort(string sortOrder)
         {
             var vehicles = await _repo.Sort(sortOrder);
-            return Ok(vehicles);
+            var vehicleList = _mapper.Map<IEnumerable<VehicleForList>>(vehicles);
+            return Ok(vehicleList);
         }
 
         [HttpPost("page/{pageNumber}/size/{pageSize}")]
         public async Task<IActionResult> GetPage(int pageNumber, int pageSize)
         {
             var vehicles = await _repo.GetPage(pageSize, pageNumber);
-            return Ok(vehicles);
+            var vehicleList = _mapper.Map<IEnumerable<VehicleForList>>(vehicles);
+            return Ok(vehicleList);
         }
 
         [HttpGet("count")]
