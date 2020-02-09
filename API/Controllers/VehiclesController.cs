@@ -132,5 +132,12 @@ namespace API.Controllers
             var vehicleList = _mapper.Map<IEnumerable<VehicleForList>>(vehicles);
             return Ok(vehicleList);
         }
+
+        [HttpPost("filterByMake/count")]
+        public async Task<IActionResult> FilterByMakeCount([FromBody]int makeId)
+        {
+            var count = await _repo.FilterByMakeCount(makeId);
+            return Ok(count);
+        }
     }
 }

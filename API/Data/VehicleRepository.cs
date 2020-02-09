@@ -104,5 +104,13 @@ namespace API.Data
                 .Where(v => v.Model.Make.Id == make.Id).ToListAsync();
             return vehicles;
         }
+
+        public async Task<int> FilterByMakeCount(int makeId)
+        {
+            var count = await _dbContext.Vehicles
+                .Where(v => v.Model.MakeId == makeId)
+                .CountAsync();
+            return count;
+        }
     }
 }
