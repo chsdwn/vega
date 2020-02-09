@@ -43,6 +43,10 @@ export class VehicleService {
     return this.http.get<number>(environment.apiUrl + 'vehicles/count');
   }
 
+  getFilterVehiclesByMakeCount(makeId: number) {
+    return this.http.post(environment.apiUrl + 'vehicles/filterByMake/count', makeId);
+  }
+
   getVehiclePage(pageNumber: number, pageSize: number) {
     return this.http
       .post(
