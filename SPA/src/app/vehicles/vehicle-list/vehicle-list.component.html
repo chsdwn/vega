@@ -14,22 +14,22 @@
       <h2 class="vehicles__table--make" (click)="onSortByMake()">
         Make
         <img 
-          *ngIf="isSorted[0] !== null"
-          [src]="isSorted[0] ? '../../../assets/svg/sort-asc.svg' : '../../../assets/svg/sort-desc.svg'"
+          *ngIf="isSortedByMakeAsc !== null"
+          [src]="isSortedByMakeAsc ? '../../../assets/svg/sort-asc.svg' : '../../../assets/svg/sort-desc.svg'"
           class="vehicles__table--sort">
       </h2>
       <h2 class="vehicles__table--model" (click)="onSortByModel()">
         Model
         <img 
-          *ngIf="isSorted[1] !== null"
-          [src]="isSorted[1] ? '../../../assets/svg/sort-asc.svg' : '../../../assets/svg/sort-desc.svg'"
+          *ngIf="isSortedByModelAsc !== null"
+          [src]="isSortedByModelAsc ? '../../../assets/svg/sort-asc.svg' : '../../../assets/svg/sort-desc.svg'"
           class="vehicles__table--sort">
       </h2>
       <h2 class="vehicles__table--name" (click)="onSortByContactName()">
         Name
         <img 
-          *ngIf="isSorted[2] !== null"
-          [src]="isSorted[2] ? '../../../assets/svg/sort-asc.svg' : '../../../assets/svg/sort-desc.svg'"
+          *ngIf="isSortedByNameAsc !== null"
+          [src]="isSortedByNameAsc ? '../../../assets/svg/sort-asc.svg' : '../../../assets/svg/sort-desc.svg'"
           class="vehicles__table--sort">
       </h2>
       

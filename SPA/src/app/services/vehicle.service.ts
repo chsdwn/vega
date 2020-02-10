@@ -5,6 +5,7 @@ import { environment } from './../../environments/environment.prod';
 
 import { KeyValuePair } from './../models/KeyValuePair';
 import { Make } from '../models/Make';
+import { Sorting } from './../models/Sorting';
 import { VehicleCreate } from './../models/VehicleCreate';
 import { VehicleDetail } from './../models/VehicleDetail';
 import { VehicleFilterByMake } from '../models/VehicleFilterByMake';
@@ -68,7 +69,7 @@ export class VehicleService {
     return this.http.delete(environment.apiUrl + 'vehicles/' + id);
   }
 
-  sortVehicles(sortOrder: string) {
-    return this.http.post(environment.apiUrl + 'vehicles/sort/' + sortOrder, null) as Observable<VehicleList[]>;
+  sortVehicles(sorting: Sorting) {
+    return this.http.post(environment.apiUrl + 'vehicles/sort', sorting) as Observable<VehicleList[]>;
   }
 }

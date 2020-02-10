@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
 
 import { VehicleService } from './../../services/vehicle.service';
 import { Make } from './../../models/Make';
+import { Sorting } from 'src/app/models/Sorting';
 import { VehicleFilterByMake } from './../../models/VehicleFilterByMake';
 import { VehicleList } from './../../models/VehicleList';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-vehicle-list',
@@ -17,7 +18,10 @@ export class VehicleListComponent implements OnInit {
   filteredVehicles: VehicleList[];
   sortedVehicles: VehicleList[];
   makes: Make[];
-  isSorted: boolean[] = [null, null, null];
+
+  isSortedByMakeAsc: boolean = null;
+  isSortedByModelAsc: boolean = null;
+  isSortedByNameAsc: boolean = null;
 
   isFilteredByMake = false;
   filterByMakeId = -1;
@@ -83,15 +87,60 @@ export class VehicleListComponent implements OnInit {
   }
 
   onSortByMake() {
-    this.sortByMake();
+    let sorting: Sorting;
+    this.pageNumber = 1;
+    this.isSortedByModelAsc = null;
+    this.isSortedByNameAsc = null;
+
+    if (this.isSortedByMakeAsc === null || !this.isSortedByMakeAsc) {
+      sorting = new Sorting('make', this.pageSize, this.pageNumber);
+      this.isSortedByMakeAsc = true;
+    } else if (this.isSortedByMakeAsc) {
+      sorting = new Sorting('make_desc', this.pageSize, this.pageNumber);
+      this.isSortedByMakeAsc = false;
+    }
+
+    this.vehicleService.sortVehicles(sorting).subscribe(data => {
+      this.filteredVehicles = data;
+    });
   }
 
   onSortByModel() {
-    this.sortByModel();
+    let sorting: Sorting;
+    this.pageNumber = 1;
+    this.isSortedByMakeAsc = null;
+    this.isSortedByNameAsc = null;
+
+    if (this.isSortedByModelAsc === null || !this.isSortedByModelAsc) {
+      sorting = new Sorting('model', this.pageSize, this.pageNumber);
+      this.isSortedByModelAsc = true;
+    } else if (this.isSortedByModelAsc) {
+      sorting = new Sorting('model_desc', this.pageSize, this.pageNumber);
+      this.isSortedByModelAsc = false;
+    }
+
+    this.vehicleService.sortVehicles(sorting).subscribe(data => {
+      this.filteredVehicles = data;
+    });
   }
 
   onSortByContactName() {
-    this.sortByContactName();
+    let sorting: Sorting;
+    this.pageNumber = 1;
+    this.isSortedByMakeAsc = null;
+    this.isSortedByModelAsc = null;
+
+    if (this.isSortedByNameAsc === null || !this.isSortedByNameAsc) {
+      sorting = new Sorting('name', this.pageSize, this.pageNumber);
+      this.isSortedByNameAsc = true;
+    } else if (this.isSortedByNameAsc) {
+      sorting = new Sorting('name_desc', this.pageSize, this.pageNumber);
+      this.isSortedByNameAsc = false;
+    }
+
+    this.vehicleService.sortVehicles(sorting).subscribe(data => {
+      this.filteredVehicles = data;
+    });
   }
 
   onNextPage() {
@@ -143,45 +192,6 @@ export class VehicleListComponent implements OnInit {
     this.pagesCount = Math.ceil(this.vehiclesCount / this.pageSize);
     this.hasNextPage = this.pagesCount > this.pageNumber;
     this.hasPreviousPage = this.pagesCount > 1 && this.pageNumber !== 1;
-  }
-
-  private sortByMake() {
-    if (!this.isSorted[0]) {
-      this.filteredVehicles.sort((v1, v2) => this.compareNames(v1.make.name, v2.make.name));
-      this.isSorted[0] = true;
-    } else {
-      this.filteredVehicles.reverse();
-      this.isSorted[0] = false;
-    }
-
-    this.isSorted[1] = null;
-    this.isSorted[2] = null;
-  }
-
-  private sortByModel() {
-    if (!this.isSorted[1]) {
-      this.filteredVehicles.sort((v1, v2) => this.compareNames(v1.model.name, v2.model.name));
-      this.isSorted[1] = true;
-    } else {
-      this.filteredVehicles.reverse();
-      this.isSorted[1] = false;
-    }
-
-    this.isSorted[0] = null;
-    this.isSorted[2] = null;
-  }
-
-  private sortByContactName() {
-    if (!this.isSorted[2]) {
-      this.filteredVehicles.sort((v1, v2) => this.compareNames(v1.contactName, v2.contactName));
-      this.isSorted[2] = true;
-    } else {
-      this.filteredVehicles.reverse();
-      this.isSorted[2] = false;
-    }
-
-    this.isSorted[0] = null;
-    this.isSorted[1] = null;
   }
 
   private compareNames(name1: string, name2: string) {
