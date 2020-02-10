@@ -126,9 +126,12 @@ namespace API.Controllers
         }
 
         [HttpPost("filterByMake")]
-        public async Task<IActionResult> FilterByMake([FromBody]KeyValuePairResource make)
+        public async Task<IActionResult> FilterByMake([FromBody]FilterByMakeResource filterByMakeResource)
         {
-            var vehicles = await _repo.FilterByMake(make);
+            var vehicles = await _repo.FilterByMake(
+                filterByMakeResource.MakeId, 
+                filterByMakeResource.PageSize, 
+                filterByMakeResource.PageNumber);
             var vehicleList = _mapper.Map<IEnumerable<VehicleForList>>(vehicles);
             return Ok(vehicleList);
         }

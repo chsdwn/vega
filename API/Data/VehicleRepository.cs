@@ -96,13 +96,14 @@ namespace API.Data
             return count;
         }
 
-        public async Task<IEnumerable<Vehicle>> FilterByMake(KeyValuePairResource make)
+        public async Task<IEnumerable<Vehicle>> FilterByMake(int makeId, int pageSize, int pageNumber)
         {
-            var vehicles = await _dbContext.Vehicles
+            var vehicles = _dbContext.Vehicles
                 .Include(v => v.Model)
                     .ThenInclude(m => m.Make)
-                .Where(v => v.Model.Make.Id == make.Id).ToListAsync();
-            return vehicles;
+                .Where(v => v.Model.Make.Id == makeId)
+                .AsNoTracking();
+            return await PaginatedList<Vehicle>.CreateAsync(vehicles, pageNumber, pageSize);
         }
 
         public async Task<int> FilterByMakeCount(int makeId)

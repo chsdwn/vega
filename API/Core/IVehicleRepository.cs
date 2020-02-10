@@ -16,7 +16,7 @@ namespace API.Core
         Task<IEnumerable<Vehicle>> Sort(string sortOrder);
         Task<IEnumerable<Vehicle>> GetPage(int pageSize, int pageNumber);
         Task<int> GetCount();
-        Task<IEnumerable<Vehicle>> FilterByMake(KeyValuePairResource make);
+        Task<IEnumerable<Vehicle>> FilterByMake(int makeId, int pageSize, int pageNumber);
         Task<int> FilterByMakeCount(int makeId);
     }
 }
