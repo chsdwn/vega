@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 
 import { VehicleService } from './../../services/vehicle.service';
 import { Make } from './../../models/Make';
+import { VehicleFilterByMake } from './../../models/VehicleFilterByMake';
 import { VehicleList } from './../../models/VehicleList';
 import { Router } from '@angular/router';
 
@@ -17,6 +18,10 @@ export class VehicleListComponent implements OnInit {
   sortedVehicles: VehicleList[];
   makes: Make[];
   isSorted: boolean[] = [null, null, null];
+
+  isFilteredByMake = false;
+  filterByMakeId = -1;
+
   vehiclesCount: number;
   pageNumber: number;
   pageSize: number;
@@ -30,9 +35,13 @@ export class VehicleListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.pageSize = 2;
+    this.pageSize = 3;
     this.pageNumber = 1;
 
+    this.initVehicles();
+  }
+
+  initVehicles() {
     forkJoin(
       this.vehicleService.getVehiclePage(this.pageNumber, this.pageSize),
       this.vehicleService.getMakes(),
@@ -53,13 +62,24 @@ export class VehicleListComponent implements OnInit {
   onMakeFilterChange(id: number) {
     if (id === -1) {
       this.filteredVehicles = this.vehicles;
+      this.isFilteredByMake = false;
+      this.filterByMakeId = -1;
+      this.initVehicles();
+      this.calculatePages();
       return;
     }
 
-    const make = this.makes.find(m => m.id === id);
-    this.vehicleService.filterVehiclesByMake({ id: make.id, name: make.name }).subscribe(data => {
-      this.filteredVehicles = data;
-    })
+    const vehicleFilterByMake = new VehicleFilterByMake(id, this.pageSize, this.pageNumber);
+    forkJoin(
+      this.vehicleService.filterVehiclesByMake(vehicleFilterByMake),
+      this.vehicleService.getFilterVehiclesByMakeCount(id),
+    ).subscribe(([vehicles, count]) => {
+      this.filteredVehicles = vehicles as VehicleList[];
+      this.vehiclesCount = count as number;
+      this.calculatePages();
+      this.isFilteredByMake = true;
+      this.filterByMakeId = id;
+    });
   }
 
   onSortByMake() {
@@ -75,9 +95,21 @@ export class VehicleListComponent implements OnInit {
   }
 
   onNextPage() {
-    if (this.pagesCount > this.pageNumber) {
+    if (this.hasNextPage) {
       this.pageNumber++;
-      this.vehicleService.getVehiclePage(this.pageNumber, this.pageSize).subscribe(data => {
+      let $vehicles: Observable<VehicleList[]>;
+
+      if (this.filterByMakeId !== -1) {
+        $vehicles = this.vehicleService.filterVehiclesByMake(new VehicleFilterByMake(
+          this.filterByMakeId,
+          this.pageSize,
+          this.pageNumber
+        ));
+      } else {
+        $vehicles = this.vehicleService.getVehiclePage(this.pageNumber, this.pageSize)
+      }
+
+      $vehicles.subscribe(data => {
         this.filteredVehicles = data;
         this.calculatePages();
       });
@@ -85,12 +117,25 @@ export class VehicleListComponent implements OnInit {
   }
 
   onPreviousPage() {
-    if (this.pageNumber > 1) {
+    if (this.hasPreviousPage) {
       this.pageNumber--;
-      this.vehicleService.getVehiclePage(this.pageNumber, this.pageSize).subscribe(data => {
+
+      let $vehicles: Observable<VehicleList[]>;
+
+      if (this.filterByMakeId !== -1) {
+        $vehicles = this.vehicleService.filterVehiclesByMake(new VehicleFilterByMake(
+          this.filterByMakeId,
+          this.pageSize,
+          this.pageNumber
+        ));
+      } else {
+        $vehicles = this.vehicleService.getVehiclePage(this.pageNumber, this.pageSize);
+      }
+
+      $vehicles.subscribe(data => {
         this.filteredVehicles = data;
         this.calculatePages();
-      });
+      })
     }
   }
 

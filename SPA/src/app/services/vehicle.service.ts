@@ -7,6 +7,7 @@ import { KeyValuePair } from './../models/KeyValuePair';
 import { Make } from '../models/Make';
 import { VehicleCreate } from './../models/VehicleCreate';
 import { VehicleDetail } from './../models/VehicleDetail';
+import { VehicleFilterByMake } from '../models/VehicleFilterByMake';
 import { VehicleList } from './../models/VehicleList';
 
 @Injectable({
@@ -59,8 +60,8 @@ export class VehicleService {
       ) as Observable<VehicleList[]>;
   }
 
-  filterVehiclesByMake(make: KeyValuePair) {
-    return this.http.post(environment.apiUrl + 'vehicles/filterByMake', make) as Observable<VehicleList[]>;
+  filterVehiclesByMake(vehicleFilterByMake: VehicleFilterByMake) {
+    return this.http.post(environment.apiUrl + 'vehicles/filterByMake', vehicleFilterByMake) as Observable<VehicleList[]>;
   }
 
   removeVehicle(id: number) {
