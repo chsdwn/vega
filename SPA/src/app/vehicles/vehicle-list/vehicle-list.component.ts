@@ -47,6 +47,9 @@ export class VehicleListComponent implements OnInit {
 
   initVehicles() {
     this.pageNumber = 1;
+    this.isSortedByMakeAsc = null;
+    this.isSortedByModelAsc = null;
+    this.isSortedByNameAsc = null;
 
     forkJoin(
       this.vehicleService.getVehiclePage(this.pageNumber, this.pageSize),
@@ -67,6 +70,9 @@ export class VehicleListComponent implements OnInit {
 
   onMakeFilterChange(id: number) {
     this.pageNumber = 1;
+    this.isSortedByMakeAsc = null;
+    this.isSortedByModelAsc = null;
+    this.isSortedByNameAsc = null;
 
     if (id === -1) {
       this.filteredVehicles = this.vehicles;
