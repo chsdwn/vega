@@ -46,6 +46,8 @@ export class VehicleListComponent implements OnInit {
   }
 
   initVehicles() {
+    this.pageNumber = 1;
+
     forkJoin(
       this.vehicleService.getVehiclePage(this.pageNumber, this.pageSize),
       this.vehicleService.getMakes(),
@@ -64,6 +66,8 @@ export class VehicleListComponent implements OnInit {
   }
 
   onMakeFilterChange(id: number) {
+    this.pageNumber = 1;
+    
     if (id === -1) {
       this.filteredVehicles = this.vehicles;
       this.isFilteredByMake = false;
