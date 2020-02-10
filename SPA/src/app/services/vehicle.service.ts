@@ -72,4 +72,8 @@ export class VehicleService {
   sortVehicles(sorting: Sorting) {
     return this.http.post(environment.apiUrl + 'vehicles/sort', sorting) as Observable<VehicleList[]>;
   }
+
+  sortFilteredByMake(sorting: Sorting, makeId: number) {
+    return this.http.post(environment.apiUrl + 'vehicles/sort/' + makeId, sorting) as Observable<VehicleList[]>;
+  }
 }

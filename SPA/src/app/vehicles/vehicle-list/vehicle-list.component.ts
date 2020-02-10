@@ -88,6 +88,7 @@ export class VehicleListComponent implements OnInit {
 
   onSortByMake() {
     let sorting: Sorting;
+    let $vehicles: Observable<VehicleList[]>;
     this.pageNumber = 1;
     this.isSortedByModelAsc = null;
     this.isSortedByNameAsc = null;
@@ -100,13 +101,21 @@ export class VehicleListComponent implements OnInit {
       this.isSortedByMakeAsc = false;
     }
 
-    this.vehicleService.sortVehicles(sorting).subscribe(data => {
+    if (this.filterByMakeId !== -1) {
+      $vehicles = this.vehicleService.sortFilteredByMake(sorting, this.filterByMakeId);
+    } else {
+      $vehicles = this.vehicleService.sortVehicles(sorting);
+    }
+
+    $vehicles.subscribe(data => {
       this.filteredVehicles = data;
     });
+    this.calculatePages();
   }
 
   onSortByModel() {
     let sorting: Sorting;
+    let $vehicles: Observable<VehicleList[]>;
     this.pageNumber = 1;
     this.isSortedByMakeAsc = null;
     this.isSortedByNameAsc = null;
@@ -119,13 +128,21 @@ export class VehicleListComponent implements OnInit {
       this.isSortedByModelAsc = false;
     }
 
-    this.vehicleService.sortVehicles(sorting).subscribe(data => {
+    if (this.filterByMakeId !== -1) {
+      $vehicles = this.vehicleService.sortFilteredByMake(sorting, this.filterByMakeId);
+    } else {
+      $vehicles = this.vehicleService.sortVehicles(sorting);
+    }
+
+    $vehicles.subscribe(data => {
       this.filteredVehicles = data;
     });
+    this.calculatePages();
   }
 
   onSortByContactName() {
     let sorting: Sorting;
+    let $vehicles: Observable<VehicleList[]>;
     this.pageNumber = 1;
     this.isSortedByMakeAsc = null;
     this.isSortedByModelAsc = null;
@@ -138,9 +155,16 @@ export class VehicleListComponent implements OnInit {
       this.isSortedByNameAsc = false;
     }
 
-    this.vehicleService.sortVehicles(sorting).subscribe(data => {
+    if (this.filterByMakeId !== -1) {
+      $vehicles = this.vehicleService.sortFilteredByMake(sorting, this.filterByMakeId);
+    } else {
+      $vehicles = this.vehicleService.sortVehicles(sorting);
+    }
+
+    $vehicles.subscribe(data => {
       this.filteredVehicles = data;
     });
+    this.calculatePages();
   }
 
   onNextPage() {
@@ -149,11 +173,41 @@ export class VehicleListComponent implements OnInit {
       let $vehicles: Observable<VehicleList[]>;
 
       if (this.filterByMakeId !== -1) {
-        $vehicles = this.vehicleService.filterVehiclesByMake(new VehicleFilterByMake(
-          this.filterByMakeId,
-          this.pageSize,
-          this.pageNumber
-        ));
+        if (this.isSortedByModelAsc !== null) {
+          if (this.isSortedByModelAsc) {
+            $vehicles = this.vehicleService.sortFilteredByMake(new Sorting(
+              'model',
+              this.pageSize,
+              this.pageNumber
+            ), this.filterByMakeId);
+          } else {
+            $vehicles = this.vehicleService.sortFilteredByMake(new Sorting(
+              'model_desc',
+              this.pageSize,
+              this.pageNumber
+            ), this.filterByMakeId);
+          }
+        } else if (this.isSortedByNameAsc !== null) {
+          if(this.isSortedByNameAsc) {
+            $vehicles = this.vehicleService.sortFilteredByMake(new Sorting(
+              'name',
+              this.pageSize,
+              this.pageNumber
+            ), this.filterByMakeId);
+          } else {
+            $vehicles = this.vehicleService.sortFilteredByMake(new Sorting(
+              'name_desc',
+              this.pageSize,
+              this.pageNumber
+            ), this.filterByMakeId);
+          }
+        } else {
+          $vehicles = this.vehicleService.filterVehiclesByMake(new VehicleFilterByMake(
+            this.filterByMakeId,
+            this.pageSize,
+            this.pageNumber
+          ));
+        }
       } else {
         $vehicles = this.vehicleService.getVehiclePage(this.pageNumber, this.pageSize)
       }
@@ -172,11 +226,41 @@ export class VehicleListComponent implements OnInit {
       let $vehicles: Observable<VehicleList[]>;
 
       if (this.filterByMakeId !== -1) {
-        $vehicles = this.vehicleService.filterVehiclesByMake(new VehicleFilterByMake(
-          this.filterByMakeId,
-          this.pageSize,
-          this.pageNumber
-        ));
+        if (this.isSortedByModelAsc !== null) {
+          if (this.isSortedByModelAsc) {
+            $vehicles = this.vehicleService.sortFilteredByMake(new Sorting(
+              'model',
+              this.pageSize,
+              this.pageNumber
+            ), this.filterByMakeId);
+          } else {
+            $vehicles = this.vehicleService.sortFilteredByMake(new Sorting(
+              'model_desc',
+              this.pageSize,
+              this.pageNumber
+            ), this.filterByMakeId);
+          }
+        } else if (this.isSortedByNameAsc !== null) {
+          if(this.isSortedByNameAsc) {
+            $vehicles = this.vehicleService.sortFilteredByMake(new Sorting(
+              'name',
+              this.pageSize,
+              this.pageNumber
+            ), this.filterByMakeId);
+          } else {
+            $vehicles = this.vehicleService.sortFilteredByMake(new Sorting(
+              'name_desc',
+              this.pageSize,
+              this.pageNumber
+            ), this.filterByMakeId);
+          }
+        } else {
+          $vehicles = this.vehicleService.filterVehiclesByMake(new VehicleFilterByMake(
+            this.filterByMakeId,
+            this.pageSize,
+            this.pageNumber
+          ));
+        }
       } else {
         $vehicles = this.vehicleService.getVehiclePage(this.pageNumber, this.pageSize);
       }
