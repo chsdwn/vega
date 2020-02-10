@@ -371,17 +371,4 @@ export class VehicleListComponent implements OnInit {
     this.hasNextPage = this.pagesCount > this.pageNumber;
     this.hasPreviousPage = this.pagesCount > 1 && this.pageNumber !== 1;
   }
-
-  private compareNames(name1: string, name2: string) {
-    name1 = name1.toLowerCase();
-    name2 = name2.toLowerCase();
-    if (name1 < name2) {
-      return -1;
-    }
-    if (name1 > name2) {
-      return 1;
-    }
-
-    return 0;
-  }
 }
