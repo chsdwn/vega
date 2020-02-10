@@ -67,7 +67,7 @@ export class VehicleListComponent implements OnInit {
 
   onMakeFilterChange(id: number) {
     this.pageNumber = 1;
-    
+
     if (id === -1) {
       this.filteredVehicles = this.vehicles;
       this.isFilteredByMake = false;
@@ -212,6 +212,48 @@ export class VehicleListComponent implements OnInit {
             this.pageNumber
           ));
         }
+      } else if (this.isSortedByMakeAsc !== null) {
+        if (this.isSortedByMakeAsc) {
+          $vehicles = this.vehicleService.sortVehicles(new Sorting(
+            'make',
+            this.pageSize,
+            this.pageNumber
+          ));
+        } else {
+          $vehicles = this.vehicleService.sortVehicles(new Sorting(
+            'make_desc',
+            this.pageSize,
+            this.pageNumber
+          ));
+        }
+      } else if (this.isSortedByModelAsc !== null) {
+        if (this.isSortedByModelAsc) {
+          $vehicles = this.vehicleService.sortVehicles(new Sorting(
+            'model',
+            this.pageSize,
+            this.pageNumber
+          ));
+        } else {
+          $vehicles = this.vehicleService.sortVehicles(new Sorting(
+            'model_desc',
+            this.pageSize,
+            this.pageNumber
+          ));
+        }
+      } else if (this.isSortedByNameAsc !== null) {
+        if (this.isSortedByNameAsc) {
+          $vehicles = this.vehicleService.sortVehicles(new Sorting(
+            'name',
+            this.pageSize,
+            this.pageNumber
+          ));
+        } else {
+          $vehicles = this.vehicleService.sortVehicles(new Sorting(
+            'name_desc',
+            this.pageSize,
+            this.pageNumber
+          ));
+        }
       } else {
         $vehicles = this.vehicleService.getVehiclePage(this.pageNumber, this.pageSize)
       }
@@ -261,6 +303,48 @@ export class VehicleListComponent implements OnInit {
         } else {
           $vehicles = this.vehicleService.filterVehiclesByMake(new VehicleFilterByMake(
             this.filterByMakeId,
+            this.pageSize,
+            this.pageNumber
+          ));
+        }
+      } else if (this.isSortedByMakeAsc !== null) {
+        if (this.isSortedByMakeAsc) {
+          $vehicles = this.vehicleService.sortVehicles(new Sorting(
+            'make',
+            this.pageSize,
+            this.pageNumber
+          ));
+        } else {
+          $vehicles = this.vehicleService.sortVehicles(new Sorting(
+            'make_desc',
+            this.pageSize,
+            this.pageNumber
+          ));
+        }
+      } else if (this.isSortedByModelAsc !== null) {
+        if (this.isSortedByModelAsc) {
+          $vehicles = this.vehicleService.sortVehicles(new Sorting(
+            'model',
+            this.pageSize,
+            this.pageNumber
+          ));
+        } else {
+          $vehicles = this.vehicleService.sortVehicles(new Sorting(
+            'model_desc',
+            this.pageSize,
+            this.pageNumber
+          ));
+        }
+      } else if (this.isSortedByNameAsc !== null) {
+        if (this.isSortedByNameAsc) {
+          $vehicles = this.vehicleService.sortVehicles(new Sorting(
+            'name',
+            this.pageSize,
+            this.pageNumber
+          ));
+        } else {
+          $vehicles = this.vehicleService.sortVehicles(new Sorting(
+            'name_desc',
             this.pageSize,
             this.pageNumber
           ));
