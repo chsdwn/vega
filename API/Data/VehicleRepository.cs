@@ -49,11 +49,14 @@ namespace API.Data
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Vehicle>> Sort(string sortOrder)
+        public async Task<IEnumerable<Vehicle>> Sort(SortingResource sortingResource)
         {
-            var vehicles = await GetAll();
+            var vehicles = _dbContext.Vehicles
+                .Include(v => v.Model)
+                    .ThenInclude(m => m.Make)
+                .AsNoTracking();
 
-            switch (sortOrder)
+            switch (sortingResource.Order)
             {
                 case "make":
                     vehicles = vehicles.OrderBy(v => v.Model.Make.Name);
@@ -78,7 +81,7 @@ namespace API.Data
                     break;
             }
 
-            return vehicles;
+            return await PaginatedList<Vehicle>.CreateAsync(vehicles, sortingResource.PageNumber, sortingResource.PageSize);
         }
 
         public async Task<IEnumerable<Vehicle>> GetPage(int pageSize, int pageNumber)

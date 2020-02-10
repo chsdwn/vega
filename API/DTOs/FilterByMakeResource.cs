@@ -1,9 +1,7 @@
 namespace API.DTOs
 {
-    public class FilterByMakeResource
+    public class FilterByMakeResource : PaginationResource
     {
         public int MakeId { get; set; }
-        public int PageSize { get; set; }
-        public int PageNumber { get; set; }
     }
 }
