@@ -142,5 +142,13 @@ namespace API.Controllers
             var count = await _repo.FilterByMakeCount(makeId);
             return Ok(count);
         }
+
+        [HttpPost("sort/{makeId}")]
+        public async Task<IActionResult> SortFilteredByMake([FromBody]SortingResource sortingResource, int makeId)
+        {
+            var vehicles = await _repo.SortFilteredByMake(sortingResource, makeId);
+            var vehicleList = _mapper.Map<IEnumerable<VehicleForList>>(vehicles);
+            return Ok(vehicleList);
+        }
     }
 }

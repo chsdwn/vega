@@ -116,5 +116,41 @@ namespace API.Data
                 .CountAsync();
             return count;
         }
+
+        public async Task<IEnumerable<Vehicle>> SortFilteredByMake(SortingResource sortingResource, int makeId)
+        {
+            var vehicles = _dbContext.Vehicles
+                .Include(v => v.Model)
+                    .ThenInclude(m => m.Make)
+                .Where(v => v.Model.MakeId == makeId)
+                .AsNoTracking();
+
+            switch (sortingResource.Order)
+            {
+                case "make":
+                    vehicles = vehicles.OrderBy(v => v.Model.Make.Name);
+                    break;
+                case "make_desc":
+                    vehicles = vehicles.OrderByDescending(v => v.Model.Make.Name);
+                    break;
+                case "model":
+                    vehicles = vehicles.OrderBy(v => v.Model.Name);
+                    break;
+                case "model_desc":
+                    vehicles = vehicles.OrderByDescending(v => v.Model.Name);
+                    break;
+                case "name":
+                    vehicles = vehicles.OrderBy(v => v.ContactName);
+                    break;
+                case "name_desc":
+                    vehicles = vehicles.OrderByDescending(v => v.ContactName);
+                    break;
+                default:
+                    vehicles = vehicles.OrderBy(v => v.Id);
+                    break;
+            }
+
+            return await PaginatedList<Vehicle>.CreateAsync(vehicles, sortingResource.PageNumber, sortingResource.PageSize);
+        }
     }
 }
