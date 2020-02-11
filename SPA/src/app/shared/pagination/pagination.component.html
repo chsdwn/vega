@@ -1,0 +1,9 @@
+<nav class="pagination" *ngIf="pageCount > 1">
+  <button class="pagination__prev" (click)="previousPage()" [class.disabled]="currentPage === 1">
+    <img src="../../../../../assets/svg/sort-asc.svg" class="pagination__prev-icon">
+  </button>
+  <span class="pagination__current">{{ currentPage }}</span>
+  <button class="pagination__next" (click)="nextPage()" [class.disabled]="currentPage >= pageCount">
+    <img src="../../../../../assets/svg/sort-asc.svg" class="pagination__next-icon">
+  </button>
+</nav>
