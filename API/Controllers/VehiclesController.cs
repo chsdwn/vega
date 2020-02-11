@@ -26,11 +26,14 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery]VehicleQueryResource vehicleQueryResource)
         {
-            var vehicleListFromDb = await _repo.GetAll();
-            var vehicleList = _mapper.Map<IEnumerable<VehicleForList>>(vehicleListFromDb);
-            return Ok(vehicleList);
+            var vehicleQuery = _mapper.Map<VehicleQuery>(vehicleQueryResource);
+
+            var queryResult = await _repo.GetAll(vehicleQuery);
+            
+            var queryResultResource = _mapper.Map<QueryResult<Vehicle>, QueryResultResource<VehicleForList>>(queryResult);
+            return Ok(queryResultResource);
         }
 
         [HttpGet("{id}")]
@@ -100,55 +103,6 @@ namespace API.Controllers
                 return Ok(id);
 
             return BadRequest("An error occured while vehicle deleting.");
-        }
-
-        [HttpPost("sort")]
-        public async Task<IActionResult> Sort([FromBody]SortingResource sortingResource)
-        {
-            var vehicles = await _repo.Sort(sortingResource);
-            var vehicleList = _mapper.Map<IEnumerable<VehicleForList>>(vehicles);
-            return Ok(vehicleList);
-        }
-
-        [HttpPost("page/{pageNumber}/size/{pageSize}")]
-        public async Task<IActionResult> GetPage(int pageNumber, int pageSize)
-        {
-            var vehicles = await _repo.GetPage(pageSize, pageNumber);
-            var vehicleList = _mapper.Map<IEnumerable<VehicleForList>>(vehicles);
-            return Ok(vehicleList);
-        }
-
-        [HttpGet("count")]
-        public async Task<IActionResult> GetCount()
-        {
-            var count = await _repo.GetCount();
-            return Ok(count);
-        }
-
-        [HttpPost("filterByMake")]
-        public async Task<IActionResult> FilterByMake([FromBody]FilterByMakeResource filterByMakeResource)
-        {
-            var vehicles = await _repo.FilterByMake(
-                filterByMakeResource.MakeId, 
-                filterByMakeResource.PageSize, 
-                filterByMakeResource.PageNumber);
-            var vehicleList = _mapper.Map<IEnumerable<VehicleForList>>(vehicles);
-            return Ok(vehicleList);
-        }
-
-        [HttpPost("filterByMake/count")]
-        public async Task<IActionResult> FilterByMakeCount([FromBody]int makeId)
-        {
-            var count = await _repo.FilterByMakeCount(makeId);
-            return Ok(count);
-        }
-
-        [HttpPost("sort/{makeId}")]
-        public async Task<IActionResult> SortFilteredByMake([FromBody]SortingResource sortingResource, int makeId)
-        {
-            var vehicles = await _repo.SortFilteredByMake(sortingResource, makeId);
-            var vehicleList = _mapper.Map<IEnumerable<VehicleForList>>(vehicles);
-            return Ok(vehicleList);
         }
     }
 }

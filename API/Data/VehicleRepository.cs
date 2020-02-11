@@ -3,9 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Core;
 using API.Core.Models;
-using API.Helpers;
-using API.DTOs;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using System;
+using API.Extensions;
 
 namespace API.Data
 {
@@ -41,116 +42,34 @@ namespace API.Data
                 .FirstOrDefaultAsync(v => v.Id == id);
         }
 
-        public async Task<IEnumerable<Vehicle>> GetAll()
+        public async Task<QueryResult<Vehicle>> GetAll(VehicleQuery vehicleQuery)
         {
-            return await _dbContext.Vehicles
+            var result = new QueryResult<Vehicle>();
+            var query = _dbContext.Vehicles
                 .Include(v => v.Model)
                     .ThenInclude(m => m.Make)
-                .ToListAsync();
-        }
+                .AsQueryable();
 
-        public async Task<IEnumerable<Vehicle>> Sort(SortingResource sortingResource)
-        {
-            var vehicles = _dbContext.Vehicles
-                .Include(v => v.Model)
-                    .ThenInclude(m => m.Make)
-                .AsNoTracking();
+            if (vehicleQuery.MakeId.HasValue)
+                query = query.Where(v => v.Model.MakeId == vehicleQuery.MakeId.Value);
 
-            switch (sortingResource.Order)
+            var columnsMap = new Dictionary<string, Expression<Func<Vehicle, object>>>()
             {
-                case "make":
-                    vehicles = vehicles.OrderBy(v => v.Model.Make.Name);
-                    break;
-                case "make_desc":
-                    vehicles = vehicles.OrderByDescending(v => v.Model.Make.Name);
-                    break;
-                case "model":
-                    vehicles = vehicles.OrderBy(v => v.Model.Name);
-                    break;
-                case "model_desc":
-                    vehicles = vehicles.OrderByDescending(v => v.Model.Name);
-                    break;
-                case "name":
-                    vehicles = vehicles.OrderBy(v => v.ContactName);
-                    break;
-                case "name_desc":
-                    vehicles = vehicles.OrderByDescending(v => v.ContactName);
-                    break;
-                default:
-                    vehicles = vehicles.OrderBy(v => v.Id);
-                    break;
-            }
+                ["make"] = v => v.Model.Make.Name,
+                ["model"] = v => v.Model.Name,
+                ["contactName"] = v => v.ContactName
+            };
+            //columnsMap.Add("make", v => v.Model.Make.Name);
 
-            return await PaginatedList<Vehicle>.CreateAsync(vehicles, sortingResource.PageNumber, sortingResource.PageSize);
-        }
+            query = query.ApplyOrdering(vehicleQuery, columnsMap);
 
-        public async Task<IEnumerable<Vehicle>> GetPage(int pageSize, int pageNumber)
-        {
-            var vehicles = _dbContext.Vehicles
-                .Include(v => v.Model)
-                    .ThenInclude(m => m.Make)
-                .AsNoTracking();
-            return await PaginatedList<Vehicle>.CreateAsync(vehicles, pageNumber, pageSize);
-        }
+            result.TotalItems = await query.CountAsync();
 
-        public async Task<int> GetCount()
-        {
-            var count = await _dbContext.Vehicles.CountAsync();
-            return count;
-        }
+            query = query.ApplyPaging(vehicleQuery);
+            
+            result.Items = await query.ToListAsync();
 
-        public async Task<IEnumerable<Vehicle>> FilterByMake(int makeId, int pageSize, int pageNumber)
-        {
-            var vehicles = _dbContext.Vehicles
-                .Include(v => v.Model)
-                    .ThenInclude(m => m.Make)
-                .Where(v => v.Model.Make.Id == makeId)
-                .AsNoTracking();
-            return await PaginatedList<Vehicle>.CreateAsync(vehicles, pageNumber, pageSize);
-        }
-
-        public async Task<int> FilterByMakeCount(int makeId)
-        {
-            var count = await _dbContext.Vehicles
-                .Where(v => v.Model.MakeId == makeId)
-                .CountAsync();
-            return count;
-        }
-
-        public async Task<IEnumerable<Vehicle>> SortFilteredByMake(SortingResource sortingResource, int makeId)
-        {
-            var vehicles = _dbContext.Vehicles
-                .Include(v => v.Model)
-                    .ThenInclude(m => m.Make)
-                .Where(v => v.Model.MakeId == makeId)
-                .AsNoTracking();
-
-            switch (sortingResource.Order)
-            {
-                case "make":
-                    vehicles = vehicles.OrderBy(v => v.Model.Make.Name);
-                    break;
-                case "make_desc":
-                    vehicles = vehicles.OrderByDescending(v => v.Model.Make.Name);
-                    break;
-                case "model":
-                    vehicles = vehicles.OrderBy(v => v.Model.Name);
-                    break;
-                case "model_desc":
-                    vehicles = vehicles.OrderByDescending(v => v.Model.Name);
-                    break;
-                case "name":
-                    vehicles = vehicles.OrderBy(v => v.ContactName);
-                    break;
-                case "name_desc":
-                    vehicles = vehicles.OrderByDescending(v => v.ContactName);
-                    break;
-                default:
-                    vehicles = vehicles.OrderBy(v => v.Id);
-                    break;
-            }
-
-            return await PaginatedList<Vehicle>.CreateAsync(vehicles, sortingResource.PageNumber, sortingResource.PageSize);
+            return result;
         }
     }
 }

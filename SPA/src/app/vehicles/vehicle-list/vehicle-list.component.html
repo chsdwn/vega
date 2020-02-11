@@ -1,63 +1,38 @@
-<div *ngIf="vehicles" class="vehicles">
+<div *ngIf="queryResult" class="vehicles">
   <div class="vehicles__make-filter">
     <label for="make-filter" class="vehicles__make-filter--title">Make:</label>
     <select
-      class="vehicles__make-filter--makes" id="make-filter"
-      (change)="onMakeFilterChange(+$event.target.value)">
-      <option value="-1" selected></option>
+      class="vehicles__make-filter--makes" 
+      id="make-filter"
+      [(ngModel)]="query.makeId"
+      (change)="onFilterChange()">
+      <option value="" selected></option>
       <option *ngFor="let make of makes" [value]="make.id">{{ make.name }}</option>
     </select>
   </div>
 
   <div class="vehicles__table">
       <h2 class="vehicles__table--id">ID</h2>
-      <h2 class="vehicles__table--make" (click)="onSortByMake()">
-        Make
-        <img 
-          *ngIf="isSortedByMakeAsc !== null"
-          [src]="isSortedByMakeAsc ? '../../../assets/svg/sort-asc.svg' : '../../../assets/svg/sort-desc.svg'"
+
+      <h2 
+        *ngFor="let column of sortableColumns" 
+        [class]="'vehicles__table--' + column.title.toLowerCase()"
+        (click)="sortBy(column.key)">
+        {{ column.title }}
+        <img
+          *ngIf="query.sortBy === column.key"
+          [src]="query.isSortAscending ? '../../../assets/svg/sort-asc.svg' : '../../../assets/svg/sort-desc.svg'"
           class="vehicles__table--sort">
       </h2>
-      <h2 class="vehicles__table--model" (click)="onSortByModel()">
-        Model
-        <img 
-          *ngIf="isSortedByModelAsc !== null"
-          [src]="isSortedByModelAsc ? '../../../assets/svg/sort-asc.svg' : '../../../assets/svg/sort-desc.svg'"
-          class="vehicles__table--sort">
-      </h2>
-      <h2 class="vehicles__table--name" (click)="onSortByContactName()">
-        Name
-        <img 
-          *ngIf="isSortedByNameAsc !== null"
-          [src]="isSortedByNameAsc ? '../../../assets/svg/sort-asc.svg' : '../../../assets/svg/sort-desc.svg'"
-          class="vehicles__table--sort">
-      </h2>
-      
+
       <p class="vehicles__table--view">&nbsp;</p>
-      <ng-container class="vehicles__table--row" *ngFor="let vehicle of filteredVehicles">
+
+      <ng-container class="vehicles__table--row" *ngFor="let vehicle of queryResult.items">
         <p>{{ vehicle.id }}</p>
         <p>{{ vehicle.make.name }}</p>
         <p>{{ vehicle.model.name }}</p>
         <p>{{ vehicle.contactName }}</p>
         <button type="button" class="vehicles__table--view-btn" (click)="onVehicleView(vehicle.id)">View/Edit</button>
       </ng-container>
-  </div>
-
-  <div class="vehicles__pagination">
-    <button 
-      class="vehicles__pagination--prev" 
-      [ngStyle]="{'visibility': hasPreviousPage ? 'visible' : 'hidden'}" 
-      (click)="onPreviousPage()">
-      <img src="../../../assets/svg/sort-asc.svg" class="vehicles__pagination--prev-icon">
-      <span class="vehicles__pagination--prev-index">{{ pageNumber - 1 }}</span>
-    </button>
-    <span class="vehicles__pagination--page-number">{{ pageNumber }}</span>
-    <button 
-      class="vehicles__pagination--next" 
-      [ngStyle]="{'visibility': hasNextPage ? 'visible' : 'hidden'}"
-      (click)="onNextPage()">
-      <span class="vehicles__pagination--next-index">{{ pageNumber + 1 }}</span>
-      <img src="../../../assets/svg/sort-asc.svg" class="vehicles__pagination--next-icon">
-    </button>
   </div>
 </div>

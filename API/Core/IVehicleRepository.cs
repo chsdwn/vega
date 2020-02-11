@@ -12,12 +12,6 @@ namespace API.Core
         void Add(Vehicle vehicle);
         void Delete(Vehicle vehicle);
         Task<Vehicle> Get(int id, bool includeRelated = true);
-        Task<IEnumerable<Vehicle>> GetAll();
-        Task<IEnumerable<Vehicle>> Sort(SortingResource sortingResource);
-        Task<IEnumerable<Vehicle>> GetPage(int pageSize, int pageNumber);
-        Task<int> GetCount();
-        Task<IEnumerable<Vehicle>> FilterByMake(int makeId, int pageSize, int pageNumber);
-        Task<int> FilterByMakeCount(int makeId);
-        Task<IEnumerable<Vehicle>> SortFilteredByMake(SortingResource sortingResource, int makeId);
+        Task<QueryResult<Vehicle>> GetAll(VehicleQuery vehicleQuery);
     }
 }

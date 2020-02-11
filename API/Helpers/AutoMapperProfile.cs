@@ -10,11 +10,21 @@ namespace API.Helpers
     {
         public static MapperConfiguration config = new MapperConfiguration(cfg => 
             {
+                // Domain to API Resource
                 cfg.CreateMap<Make, MakeResource>();
                 cfg.CreateMap<Make, KeyValuePairResource>();
                 cfg.CreateMap<Model, KeyValuePairResource>();
                 cfg.CreateMap<Feature, KeyValuePairResource>();
-
+                cfg.CreateMap(typeof(QueryResult<>), typeof(QueryResultResource<>));    
+                cfg.CreateMap<Vehicle, VehicleForList>()
+                    .ForMember(
+                        dest => dest.Make,
+                        opt => opt.MapFrom(src => src.Model.Make)
+                    )
+                    .ForMember(
+                        dest => dest.Model,
+                        opt => opt.MapFrom(src => src.Model)
+                    );        
                 cfg.CreateMap<Vehicle, VehicleForDetailed>()
                     .ForMember(
                         dest => dest.Make,
@@ -38,15 +48,9 @@ namespace API.Helpers
                             Email = src.ContactEmail
                         })
                     );
-                cfg.CreateMap<Vehicle, VehicleForList>()
-                    .ForMember(
-                        dest => dest.Make,
-                        opt => opt.MapFrom(src => src.Model.Make)
-                    )
-                    .ForMember(
-                        dest => dest.Model,
-                        opt => opt.MapFrom(src => src.Model)
-                    );
+
+                // API Resource to Domain
+                cfg.CreateMap<VehicleQueryResource, VehicleQuery>();
                 cfg.CreateMap<VehicleForCreation, Vehicle>()
                     .ForMember(
                         dest => dest.ContactName,

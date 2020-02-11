@@ -1,3 +1,4 @@
+import { QueryResult } from './../models/QueryResult';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -5,10 +6,8 @@ import { environment } from './../../environments/environment.prod';
 
 import { KeyValuePair } from './../models/KeyValuePair';
 import { Make } from '../models/Make';
-import { Sorting } from './../models/Sorting';
 import { VehicleCreate } from './../models/VehicleCreate';
 import { VehicleDetail } from './../models/VehicleDetail';
-import { VehicleFilterByMake } from '../models/VehicleFilterByMake';
 import { VehicleList } from './../models/VehicleList';
 
 @Injectable({
@@ -37,16 +36,8 @@ export class VehicleService {
     return this.http.get<VehicleDetail>(environment.apiUrl + 'vehicles/' + id);
   }
 
-  getVehicles() {
-    return this.http.get<VehicleList[]>(environment.apiUrl + 'vehicles');
-  }
-
-  getVehiclesCount() {
-    return this.http.get<number>(environment.apiUrl + 'vehicles/count');
-  }
-
-  getFilterVehiclesByMakeCount(makeId: number) {
-    return this.http.post(environment.apiUrl + 'vehicles/filterByMake/count', makeId);
+  getVehicles(filter) {
+    return this.http.get<QueryResult[]>(environment.apiUrl + 'vehicles?' + this.toQueryString(filter));
   }
 
   getVehiclePage(pageNumber: number, pageSize: number) {
@@ -61,19 +52,20 @@ export class VehicleService {
       ) as Observable<VehicleList[]>;
   }
 
-  filterVehiclesByMake(vehicleFilterByMake: VehicleFilterByMake) {
-    return this.http.post(environment.apiUrl + 'vehicles/filterByMake', vehicleFilterByMake) as Observable<VehicleList[]>;
-  }
-
   removeVehicle(id: number) {
     return this.http.delete(environment.apiUrl + 'vehicles/' + id);
   }
 
-  sortVehicles(sorting: Sorting) {
-    return this.http.post(environment.apiUrl + 'vehicles/sort', sorting) as Observable<VehicleList[]>;
-  }
+  toQueryString(obj) {
+    var parts = [];
+    for (var property in obj) {
+      var value = obj[property];
 
-  sortFilteredByMake(sorting: Sorting, makeId: number) {
-    return this.http.post(environment.apiUrl + 'vehicles/sort/' + makeId, sorting) as Observable<VehicleList[]>;
+      if (value !== null && value !== undefined) {
+        parts.push(encodeURIComponent(property) + '=' + encodeURIComponent(value));
+      }
+    }
+
+    return parts.join('&');
   }
 }
