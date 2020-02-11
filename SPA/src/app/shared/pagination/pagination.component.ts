@@ -15,7 +15,6 @@ export class PaginationComponent implements OnChanges {
 
   ngOnChanges() {
     this.pageCount = Math.ceil(this.totalItems / this.pageSize);
-    console.log(this.pageCount);
   }
 
   previousPage() {

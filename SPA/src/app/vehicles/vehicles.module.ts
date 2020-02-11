@@ -9,6 +9,7 @@ import { VehicleHomeComponent } from './vehicle-home/vehicle-home.component';
 import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
 import { VehicleNewComponent } from './vehicle-new/vehicle-new.component';
 import { DialogBoxComponent } from './../shared/dialog-box/dialog-box.component';
+import { PaginationComponent } from './../shared/pagination/pagination.component';
 
 import { PlaceholderDirective } from './../shared/placeholder.directive';
 
@@ -19,7 +20,8 @@ import { PlaceholderDirective } from './../shared/placeholder.directive';
     VehicleListComponent,
     VehicleNewComponent,
     DialogBoxComponent,
-    PlaceholderDirective
+    PlaceholderDirective,
+    PaginationComponent
   ],
   imports: [
     CommonModule,

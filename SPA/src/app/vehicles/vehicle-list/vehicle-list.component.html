@@ -35,4 +35,5 @@
         <button type="button" class="vehicles__table--view-btn" (click)="onVehicleView(vehicle.id)">View/Edit</button>
       </ng-container>
   </div>
+  <pagination [page-size]="query.pageSize" [total-items]="queryResult.totalItems" (page)="onPageChange($event)"></pagination>
 </div>

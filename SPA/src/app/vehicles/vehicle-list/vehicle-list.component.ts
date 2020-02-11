@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription, Subject, Observable } from 'rxjs';
 
 import { Make } from './../../models/Make';
 import { QueryResult } from './../../models/QueryResult';
@@ -13,6 +14,8 @@ import { VehicleService } from './../../services/vehicle.service';
 export class VehicleListComponent implements OnInit {
   queryResult: QueryResult[];
   makes: Make[];
+
+  page: Observable<number>;
 
   query: any = {
     pageSize: 3
@@ -32,6 +35,8 @@ export class VehicleListComponent implements OnInit {
   ngOnInit() {
     this.vehicleService.getMakes().subscribe(makes => this.makes = makes);
     this.populateVehicles();
+
+    //this.page.subscribe(page => console.log(page));
   }
 
   onVehicleView(id: number) {
@@ -40,6 +45,11 @@ export class VehicleListComponent implements OnInit {
 
   onFilterChange() {
     this.query.page = 1;
+    this.populateVehicles();
+  }
+
+  onPageChange(e) {
+    this.query.page = e;
     this.populateVehicles();
   }
 
