@@ -10,6 +10,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace API.Controllers
 {
@@ -17,23 +18,23 @@ namespace API.Controllers
     [Route("api/vehicles/{vehicleId}/[controller]")]
     public class PhotosController : ControllerBase
     {
-        private readonly int MAX_FILE_SIZE = 10 * 1024 * 1024;
-        private readonly string[] ALLOWED_FILE_EXTENSIONS = new[] {".jpg", ".jpeg", ".png"};
-
         public readonly IWebHostEnvironment _host;
         public readonly IVehicleRepository _vehicleRepo;
         public readonly IUnitOfWork _unitOfWork;
         public readonly IMapper _mapper;
+        public readonly PhotoSettings photoSettings;
 
         public PhotosController(
             IWebHostEnvironment host, 
             IVehicleRepository vehicleRepo, 
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IOptionsSnapshot<PhotoSettings> options)
         {
             _host = host;
             _vehicleRepo = vehicleRepo;
             _unitOfWork = unitOfWork;
             _mapper = new Mapper(AutoMapperProfile.config);
+            photoSettings = options.Value;
         }
         
         [HttpPost]
@@ -45,9 +46,8 @@ namespace API.Controllers
 
             if(file == null) return BadRequest("No image found");
             if(file.Length == 0) return BadRequest("Empty file");
-            if(file.Length > MAX_FILE_SIZE) return BadRequest("Max file size exceeded");
-            if(!ALLOWED_FILE_EXTENSIONS.Any(e => e == Path.GetExtension(file.FileName))) 
-                return BadRequest("Invalid image type");
+            if(file.Length > photoSettings.MaxSize) return BadRequest("Max file size exceeded");
+            if(!photoSettings.IsSupported(file.FileName)) return BadRequest("Invalid image type");
 
             var uploadsFolderPath = Path.Combine(_host.WebRootPath, "uploads");
 

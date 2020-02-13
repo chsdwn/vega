@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using API.Core.Models;
 
 namespace API
 {
@@ -22,6 +23,8 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
+
             services.AddControllers();
 
             services.AddScoped<IVehicleRepository, VehicleRepository>();
