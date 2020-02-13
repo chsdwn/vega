@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Core;
 using API.Core.Models;
@@ -16,6 +17,9 @@ namespace API.Controllers
     [Route("api/vehicles/{vehicleId}/[controller]")]
     public class PhotosController : ControllerBase
     {
+        private readonly int MAX_FILE_SIZE = 10 * 1024 * 1024;
+        private readonly string[] ALLOWED_FILE_EXTENSIONS = new[] {".jpg", ".jpeg", ".png"};
+
         public readonly IWebHostEnvironment _host;
         public readonly IVehicleRepository _vehicleRepo;
         public readonly IUnitOfWork _unitOfWork;
@@ -38,6 +42,12 @@ namespace API.Controllers
             var vehicle = await _vehicleRepo.Get(vehicleId, includeRelated: false);
             if(vehicle == null)
                 return NotFound();
+
+            if(file == null) return BadRequest("No image found");
+            if(file.Length == 0) return BadRequest("Empty file");
+            if(file.Length > MAX_FILE_SIZE) return BadRequest("Max file size exceeded");
+            if(!ALLOWED_FILE_EXTENSIONS.Any(e => e == Path.GetExtension(file.FileName))) 
+                return BadRequest("Invalid image type");
 
             var uploadsFolderPath = Path.Combine(_host.WebRootPath, "uploads");
 
