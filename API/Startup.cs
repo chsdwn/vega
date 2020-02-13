@@ -28,6 +28,7 @@ namespace API
             services.AddControllers();
 
             services.AddScoped<IVehicleRepository, VehicleRepository>();
+            services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAutoMapper(typeof(Startup));

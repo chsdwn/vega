@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,18 +19,21 @@ namespace API.Controllers
     [Route("api/vehicles/{vehicleId}/[controller]")]
     public class PhotosController : ControllerBase
     {
-        public readonly IWebHostEnvironment _host;
-        public readonly IVehicleRepository _vehicleRepo;
-        public readonly IUnitOfWork _unitOfWork;
-        public readonly IMapper _mapper;
-        public readonly PhotoSettings photoSettings;
+        private readonly IPhotoRepository _repo;
+        private readonly IWebHostEnvironment _host;
+        private readonly IVehicleRepository _vehicleRepo;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly PhotoSettings photoSettings;
 
         public PhotosController(
+            IPhotoRepository repo,
             IWebHostEnvironment host, 
             IVehicleRepository vehicleRepo, 
             IUnitOfWork unitOfWork,
             IOptionsSnapshot<PhotoSettings> options)
         {
+            _repo = repo;
             _host = host;
             _vehicleRepo = vehicleRepo;
             _unitOfWork = unitOfWork;
@@ -72,6 +76,15 @@ namespace API.Controllers
             }
 
             return BadRequest("An error occured while saving photo");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll(int vehicleId)
+        {
+            var photos = await _repo.GetAll(vehicleId);
+            var photoList = _mapper.Map<IEnumerable<PhotoResource>>(photos);
+
+            return Ok(photoList);
         }
     }
 }
