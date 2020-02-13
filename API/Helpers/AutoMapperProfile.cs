@@ -15,6 +15,7 @@ namespace API.Helpers
                 cfg.CreateMap<Make, KeyValuePairResource>();
                 cfg.CreateMap<Model, KeyValuePairResource>();
                 cfg.CreateMap<Feature, KeyValuePairResource>();
+                cfg.CreateMap<Photo, PhotoResource>();
                 cfg.CreateMap(typeof(QueryResult<>), typeof(QueryResultResource<>));    
                 cfg.CreateMap<Vehicle, VehicleForList>()
                     .ForMember(
