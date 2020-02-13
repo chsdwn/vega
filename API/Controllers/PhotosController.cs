@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -65,6 +66,10 @@ namespace API.Controllers
             {
                 await file.CopyToAsync(stream);
             }
+
+            var thumbnailPath = Path.Combine(uploadsFolderPath, "thumb-" + fileName);
+            Bitmap b = (Bitmap)Bitmap.FromFile(filePath);
+            b.GetThumbnailImage(100, 100, null, IntPtr.Zero).Save(thumbnailPath);
 
             var photo = new Photo { FileName = fileName};
             vehicle.Photos.Add(photo);
