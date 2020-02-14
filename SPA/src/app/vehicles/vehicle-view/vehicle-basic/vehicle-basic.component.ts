@@ -2,17 +2,17 @@ import { Component, OnInit, ViewChild, OnDestroy, ComponentFactoryResolver } fro
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription, forkJoin } from 'rxjs';
-import { VehicleService } from '../../services/vehicle.service';
+import { VehicleService } from '../../../services/vehicle.service';
 
-import { DialogBoxComponent } from '../../shared/dialog-box/dialog-box.component';
-import { PlaceholderDirective } from '../../shared/placeholder.directive';
+import { DialogBoxComponent } from '../../../shared/dialog-box/dialog-box.component';
+import { PlaceholderDirective } from '../../../shared/placeholder.directive';
 
-import { Contact } from '../../models/Contact';
-import { Feature } from '../../models/Feature';
-import { KeyValuePair } from '../../models/KeyValuePair';
-import { Make } from '../../models/Make';
-import { VehicleCreate } from '../../models/VehicleCreate';
-import { VehicleDetail } from '../../models/VehicleDetail';
+import { Contact } from '../../../models/Contact';
+import { Feature } from '../../../models/Feature';
+import { KeyValuePair } from '../../../models/KeyValuePair';
+import { Make } from '../../../models/Make';
+import { VehicleCreate } from '../../../models/VehicleCreate';
+import { VehicleDetail } from '../../../models/VehicleDetail';
 
 @Component({
   selector: 'app-vehicle-basic',

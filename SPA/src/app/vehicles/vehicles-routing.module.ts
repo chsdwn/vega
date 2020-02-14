@@ -4,7 +4,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { VehiclesComponent } from './vehicles.component';
 import { VehicleHomeComponent } from './vehicle-home/vehicle-home.component';
 import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
-import { VehicleBasicComponent } from './vehicle-basic/vehicle-basic.component';
 
 const routes: Routes = [
   {
@@ -13,8 +12,8 @@ const routes: Routes = [
     children: [
       { path: '', component: VehicleHomeComponent},
       { path: 'list', component: VehicleListComponent },
-      { path: 'new', component: VehicleBasicComponent },
-      { path: ':id', component: VehicleBasicComponent }
+      { path: 'new', loadChildren: () => import('./vehicle-view/vehicle-view.module').then(vw => vw.VehicleViewModule) },
+      { path: ':id', loadChildren: () => import('./vehicle-view/vehicle-view.module').then(vw => vw.VehicleViewModule) }
     ]
   }
 ];
