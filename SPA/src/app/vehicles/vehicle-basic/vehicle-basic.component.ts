@@ -4,22 +4,22 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription, forkJoin } from 'rxjs';
 import { VehicleService } from '../../services/vehicle.service';
 
-import { DialogBoxComponent } from './../../shared/dialog-box/dialog-box.component';
-import { PlaceholderDirective } from './../../shared/placeholder.directive';
+import { DialogBoxComponent } from '../../shared/dialog-box/dialog-box.component';
+import { PlaceholderDirective } from '../../shared/placeholder.directive';
 
-import { Contact } from './../../models/Contact';
-import { Feature } from './../../models/Feature';
-import { KeyValuePair } from './../../models/KeyValuePair';
+import { Contact } from '../../models/Contact';
+import { Feature } from '../../models/Feature';
+import { KeyValuePair } from '../../models/KeyValuePair';
 import { Make } from '../../models/Make';
-import { VehicleCreate } from './../../models/VehicleCreate';
-import { VehicleDetail } from './../../models/VehicleDetail';
+import { VehicleCreate } from '../../models/VehicleCreate';
+import { VehicleDetail } from '../../models/VehicleDetail';
 
 @Component({
-  selector: 'app-vehicle-new',
-  templateUrl: './vehicle-new.component.html',
-  styleUrls: ['./vehicle-new.component.scss']
+  selector: 'app-vehicle-basic',
+  templateUrl: './vehicle-basic.component.html',
+  styleUrls: ['./vehicle-basic.component.scss']
 })
-export class VehicleNewComponent implements OnInit, OnDestroy {
+export class VehicleBasicComponent implements OnInit, OnDestroy {
   @ViewChild(PlaceholderDirective, { static: true }) dialogBoxHost: PlaceholderDirective;
   id: number;
   vehicle: VehicleDetail;
