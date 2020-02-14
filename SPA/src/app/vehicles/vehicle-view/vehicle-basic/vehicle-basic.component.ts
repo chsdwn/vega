@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy, ComponentFactoryResolver } from '@angular/core';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription, forkJoin } from 'rxjs';
 import { VehicleService } from '../../../services/vehicle.service';
 
@@ -31,18 +31,17 @@ export class VehicleBasicComponent implements OnInit, OnDestroy {
   private dialogBoxComponentSubscription: Subscription;
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private vehicleService: VehicleService,
     private componentFactoryResolver: ComponentFactoryResolver
-  ) {
-    this.route.params.subscribe((params: Params) => {
-      this.id = +params.id;
-      this.editMode = params.id != null;
-    });
-  }
+  ) { }
 
   ngOnInit() {
+    this.vehicleService.getVehicleId().subscribe(vehicleId => {
+      this.id = vehicleId;
+      this.editMode = vehicleId != null;
+    });
+
     const sources: any = [
       this.vehicleService.getMakes(),
       this.vehicleService.getFeatures(),
@@ -151,11 +150,11 @@ export class VehicleBasicComponent implements OnInit, OnDestroy {
 
       if (this.editMode) {
         this.vehicleService.updateVehicle(createVehicle, this.id).subscribe(res => {
-          this.router.navigate(['../', 'list'], { relativeTo: this.route });
+          this.router.navigate(['/vehicles/list']);
         });
       } else {
         this.vehicleService.addVehicle(createVehicle).subscribe(res => {
-          this.router.navigate(['../', 'list'], { relativeTo: this.route });
+          this.router.navigate(['/vehicles/list']);
         });
       }
     }
@@ -199,7 +198,7 @@ export class VehicleBasicComponent implements OnInit, OnDestroy {
     this.dialogBoxComponentSubscription = componentRef.instance.isApproved.subscribe((isApproved: boolean) => {
       if (isApproved) {
         this.vehicleService.removeVehicle(this.id).subscribe(res => {
-          this.router.navigate(['../', 'list'], { relativeTo: this.route });
+          this.router.navigate(['/vehicles/list']);
         });
       } else {
         this.dialogBoxComponentSubscription.unsubscribe();

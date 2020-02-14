@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+
+import { VehicleService } from './../../services/vehicle.service';
 
 @Component({
   selector: 'app-vehicle-view',
@@ -7,9 +10,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VehicleViewComponent implements OnInit {
 
-  constructor() { }
+  constructor(private route: ActivatedRoute, private vehicleService: VehicleService) { }
 
   ngOnInit() {
+    this.route.params.subscribe((params: Params) => {
+      if (params.id) {
+        this.vehicleService.setVehicleId(+params.id);
+      }
+    });
   }
 
 }

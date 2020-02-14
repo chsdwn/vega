@@ -1,5 +1,5 @@
 import { QueryResult } from './../models/QueryResult';
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from './../../environments/environment.prod';
@@ -14,7 +14,17 @@ import { VehicleList } from './../models/VehicleList';
   providedIn: 'root'
 })
 export class VehicleService {
+  public id = new EventEmitter<number>();
+
   constructor(private http: HttpClient) { }
+
+  getVehicleId() {
+    return this.id;
+  }
+
+  setVehicleId(id: number) {
+    this.id.next(id);
+  }
 
   getMakes() {
     return this.http.get<Make[]>(environment.apiUrl + 'makes');

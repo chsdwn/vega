@@ -1,7 +1,9 @@
 <ng-template appPlaceholder></ng-template>
 <ng-container *ngIf="newVehicleForm">
 <form [formGroup]="newVehicleForm" (ngSubmit)="onSubmit()" class="vehicle-form">
-  <h1 class="vehicle-form__title">Add New Vehicle</h1>
+  <h1 class="vehicle-form__title">
+    {{ editMode ? 'Update Vehicle' : 'Add New Vehicle' }}
+  </h1>
   <div formGroupName="vehicleData">
     <div class="vehicle-form__make">
       <label for="makes" class="vehicle-form__make--title">Makes: </label>
