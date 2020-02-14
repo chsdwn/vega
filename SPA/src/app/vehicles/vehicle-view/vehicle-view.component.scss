@@ -1,0 +1,50 @@
+.vehicle-view {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__tab {
+
+    &--btn {
+      width: 10rem;
+      border: none;
+      outline: none;
+      padding: 5px 0;
+      background-color: white;
+      color: black;
+      font-size: 2rem;
+      transform: translateY(1px);
+
+      &:hover {
+        color: grey;
+      }
+    }
+
+    &--container {
+      width: 80vw;
+      height: 80vh;
+      border: 1px solid black;
+      border-radius: 0 3px 3px 3px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+.active-tab {
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-bottom: 1px solid white;
+  border-radius: 3px 3px 0 0;
+  font-weight: 700;
+
+  &:hover {
+    color: black;
+  }
+}

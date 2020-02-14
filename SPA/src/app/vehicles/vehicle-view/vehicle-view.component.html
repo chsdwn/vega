@@ -1,3 +1,10 @@
-<p>
-  vehicle-view works!
-</p>
+<div class="vehicle-view">
+  <div class="vehicle-view__tab">
+    <button class="vehicle-view__tab--btn" routerLink="basic" routerLinkActive="active-tab">Vehicle</button>
+    <button class="vehicle-view__tab--btn" routerLink="photo" routerLinkActive="active-tab">Photo</button>
+
+    <div class="vehicle-view__tab--container">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

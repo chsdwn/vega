@@ -6,6 +6,7 @@ import { VehicleBasicComponent } from './vehicle-basic/vehicle-basic.component';
 import { NgModule } from '@angular/core';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'basic' },
   {
     path: '', component: VehicleViewComponent,
     children: [
