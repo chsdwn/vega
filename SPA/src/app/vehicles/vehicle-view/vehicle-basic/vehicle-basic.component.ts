@@ -34,14 +34,14 @@ export class VehicleBasicComponent implements OnInit, OnDestroy {
     private router: Router,
     private vehicleService: VehicleService,
     private componentFactoryResolver: ComponentFactoryResolver
-  ) { }
-
-  ngOnInit() {
+  ) {
     this.vehicleService.getVehicleId().subscribe(vehicleId => {
       this.id = vehicleId;
       this.editMode = vehicleId != null;
     });
+  }
 
+  ngOnInit() {
     const sources: any = [
       this.vehicleService.getMakes(),
       this.vehicleService.getFeatures(),
