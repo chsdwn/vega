@@ -1,11 +1,14 @@
+import { Injectable, EventEmitter } from '@angular/core';
+import { HttpClient, HttpEventType } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+
 import { environment } from './../../environments/environment.prod';
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PhotoService {
+  uploadProgress = new EventEmitter<number>();
 
   constructor(private http: HttpClient) { }
   
@@ -14,9 +17,24 @@ export class PhotoService {
   }
 
   upload(vehicleId: number, photo: File) {
+    this.uploadProgress.next(0);
+
     const formData = new FormData();
     formData.append('file', photo);
     
-    return this.http.post(`${environment.apiUrl}vehicles/${vehicleId}/photos`, formData);
+    return this.http.post(`${environment.apiUrl}vehicles/${vehicleId}/photos`,
+      formData,
+      { reportProgress: true, observe: 'events' }
+    ).pipe(
+      map(event => {
+        switch(event.type) {
+          case HttpEventType.UploadProgress:
+            const percentage = Math.round(100 * event.loaded / event.total);
+            this.uploadProgress.next(percentage);
+          case HttpEventType.Response:
+            return event.body;
+        }
+      })
+    );
   }
 }

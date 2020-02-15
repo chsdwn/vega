@@ -1,3 +1,5 @@
+import { Subscription } from 'rxjs';
+import { HttpEventType, HttpEvent } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 import { VehicleService } from './../../../services/vehicle.service';
@@ -16,6 +18,7 @@ export class VehiclePhotoComponent implements OnInit {
     url: string,
     thumbnailUrl: string
   }[] = [];
+  photoUploadPercentage: number;
 
   constructor(
     private photoService: PhotoService,
@@ -39,7 +42,13 @@ export class VehiclePhotoComponent implements OnInit {
       const photo = e.target.files[0];
       
       this.photoService.upload(this.vehicleId, photo)
-        .subscribe(photo => this.photos.push(this.createPhotoWithUrl(photo)));
+        .subscribe(photo => {
+          if (photo) {
+            this.photos.push(this.createPhotoWithUrl(photo));
+          }
+        });
+      
+      this.photoService.uploadProgress.subscribe(percentage => this.photoUploadPercentage = percentage);
     }
   }
 
