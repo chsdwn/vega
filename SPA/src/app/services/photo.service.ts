@@ -12,4 +12,11 @@ export class PhotoService {
   getPhotos(vehicleId: number) {
     return this.http.get<{id:number, fileName: string}[]>(`${environment.apiUrl}vehicles/${vehicleId}/photos`);
   }
+
+  upload(vehicleId: number, photo: File) {
+    const formData = new FormData();
+    formData.append('file', photo);
+    
+    return this.http.post(`${environment.apiUrl}vehicles/${vehicleId}/photos`, formData);
+  }
 }

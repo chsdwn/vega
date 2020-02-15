@@ -28,16 +28,27 @@ export class VehiclePhotoComponent implements OnInit {
     if (this.vehicleId) {
       this.photoService.getPhotos(this.vehicleId).subscribe(photos => {
         for (const photo of photos) {
-          const photoWithUrl = {
-            id: photo.id,
-            fileName: photo.fileName,
-            url: `http://localhost:5000/uploads/${photo.fileName}`,
-            thumbnailUrl: `http://localhost:5000/uploads/thumb-${photo.fileName}`
-          }
-          this.photos.push(photoWithUrl);
+          this.photos.push(this.createPhotoWithUrl(photo));
         }
       });
     }
   }
 
+  onPhotoSelect(e) {
+    if (this.vehicleId) {
+      const photo = e.target.files[0];
+      
+      this.photoService.upload(this.vehicleId, photo)
+        .subscribe(photo => this.photos.push(this.createPhotoWithUrl(photo)));
+    }
+  }
+
+  private createPhotoWithUrl(photo) {
+    return {
+      id: photo.id,
+      fileName: photo.fileName,
+      url: `http://localhost:5000/uploads/${photo.fileName}`,
+      thumbnailUrl: `http://localhost:5000/uploads/thumb-${photo.fileName}`
+    };
+  }
 }

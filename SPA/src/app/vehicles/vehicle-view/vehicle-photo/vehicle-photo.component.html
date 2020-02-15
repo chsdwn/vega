@@ -1,3 +1,10 @@
-<ng-container *ngIf="photos">
+<span *ngIf="!vehicleId">Create a car first.</span>
+<span *ngIf="vehicleId && photos.length === 0">No photo found for this car.</span>
+
+<ng-container *ngIf="vehicleId && photos">
   <img *ngFor="let photo of photos" [src]="photo.thumbnailUrl">
+</ng-container>
+
+<ng-container *ngIf="vehicleId">
+  <input type="file" title="Select a photo" (change)="onPhotoSelect($event)">
 </ng-container>
