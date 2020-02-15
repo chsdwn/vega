@@ -13,9 +13,11 @@ export class VehicleViewComponent implements OnInit {
   constructor(private route: ActivatedRoute, private vehicleService: VehicleService) { }
 
   ngOnInit() {
+    this.vehicleService.id = null;
+
     this.route.params.subscribe((params: Params) => {
       if (params.id) {
-        this.vehicleService.setVehicleId(+params.id);
+        this.vehicleService.id = +params.id;
       }
     });
   }

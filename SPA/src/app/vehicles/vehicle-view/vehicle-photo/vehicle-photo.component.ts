@@ -20,22 +20,24 @@ export class VehiclePhotoComponent implements OnInit {
   constructor(
     private photoService: PhotoService,
     private vehicleService: VehicleService
-  ) {
-    this.vehicleService.getVehicleId().subscribe(vehicleId => this.vehicleId = vehicleId);
-  }
+  ) { }
 
   ngOnInit() {
-    this.photoService.getPhotos(this.vehicleId).subscribe(photos => {
-      for (const photo of photos) {
-        const photoWithUrl = {
-          id: photo.id,
-          fileName: photo.fileName,
-          url: `http://localhost:5000/uploads/${photo.fileName}`,
-          thumbnailUrl: `http://localhost:5000/uploads/thumb-${photo.fileName}`
+    this.vehicleId = this.vehicleService.id;
+
+    if (this.vehicleId) {
+      this.photoService.getPhotos(this.vehicleId).subscribe(photos => {
+        for (const photo of photos) {
+          const photoWithUrl = {
+            id: photo.id,
+            fileName: photo.fileName,
+            url: `http://localhost:5000/uploads/${photo.fileName}`,
+            thumbnailUrl: `http://localhost:5000/uploads/thumb-${photo.fileName}`
+          }
+          this.photos.push(photoWithUrl);
         }
-        this.photos.push(photoWithUrl);
-      }
-    });
+      });
+    }
   }
 
 }

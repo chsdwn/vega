@@ -14,17 +14,9 @@ import { VehicleList } from './../models/VehicleList';
   providedIn: 'root'
 })
 export class VehicleService {
-  public id = new EventEmitter<number>();
+  public id: number;
 
   constructor(private http: HttpClient) { }
-
-  getVehicleId() {
-    return this.id;
-  }
-
-  setVehicleId(id: number) {
-    this.id.next(id);
-  }
 
   getMakes() {
     return this.http.get<Make[]>(environment.apiUrl + 'makes');
