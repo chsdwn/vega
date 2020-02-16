@@ -18,7 +18,7 @@ export class VehiclePhotoComponent implements OnInit {
     url: string,
     thumbnailUrl: string
   }[] = [];
-  photoUploadPercentage: number;
+  photoUploadPercentage: number = 0;
 
   constructor(
     private photoService: PhotoService,
@@ -45,6 +45,7 @@ export class VehiclePhotoComponent implements OnInit {
         .subscribe(photo => {
           if (photo) {
             this.photos.push(this.createPhotoWithUrl(photo));
+            this.photoUploadPercentage = 0;
           }
         });
       

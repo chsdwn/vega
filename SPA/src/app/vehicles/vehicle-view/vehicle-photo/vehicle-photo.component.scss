@@ -1,0 +1,47 @@
+.vehicle-photo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__album {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 5px;
+  }
+
+  &__album-frame {
+    border: 5px solid grey;
+    border-radius: 3px;
+    padding: 5px;
+  }
+
+  &__album-img {
+    transition: all .15s;
+        
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  &__upload {
+    margin-top: 1rem;
+    padding: 5px 10px;
+    border: 1px solid black;
+    border-radius: 3px;
+    font-size: 2rem;
+    background-color: white;
+    cursor: pointer;
+    user-select: none;
+
+    transition: all .15s;
+    
+    &:hover {
+      background-color: lightgrey;
+    }
+  }
+}
+
+.hidden {
+  display: none;
+}
