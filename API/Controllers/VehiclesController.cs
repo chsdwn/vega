@@ -6,6 +6,7 @@ using API.Core.Models;
 using API.DTOs;
 using API.Helpers;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -49,6 +50,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody]VehicleForCreation vehicleForCreationDto)
         {
             if(!ModelState.IsValid) 
@@ -69,6 +71,7 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> Update([FromBody]VehicleForCreation vehicleForUpdateDto, int id)
         {
             var vehicle = await _repo.Get(id);
@@ -90,6 +93,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             var vehicle = await _repo.Get(id, includeRelated: false);
