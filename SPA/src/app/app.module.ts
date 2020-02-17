@@ -6,11 +6,13 @@ import { ToastrModule } from 'ngx-toastr';
 import { AppErrorHandler } from './shared/app.error-handler';
 
 import { AppRoutingModule } from './app-routing.module';
+import { NavComponent } from './nav/nav.component';
 import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NavComponent
   ],
   imports: [
     BrowserModule,

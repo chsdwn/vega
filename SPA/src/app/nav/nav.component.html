@@ -1,0 +1,10 @@
+<nav class="nav">
+  <div class="nav__link">
+    <a routerLink="/vehicles" class="nav__link--btn" routerLinkActive="nav__link--btn-active">Vehicles</a>
+  </div>
+
+  <div class="nav__user">
+    <a *ngIf="!auth.loggedIn" (click)="auth.login()" class="nav__link--btn">Login</a>
+    <a *ngIf="auth.loggedIn" (click)="auth.logout()" class="nav__link--btn">Logout</a>
+  </div>
+</nav>
