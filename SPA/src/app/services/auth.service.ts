@@ -78,13 +78,14 @@ export class AuthService {
     // A desired redirect path can be passed to login method
     // (e.g., from a route guard)
     // Ensure Auth0 client instance exists
-    this.auth0Client$.subscribe((client: Auth0Client) => {
-      // Call method to log in
-      client.loginWithRedirect({
-        redirect_uri: `${window.location.origin}`,
-        appState: { target: redirectPath }
-      });
-    });
+    // this.auth0Client$.subscribe((client: Auth0Client) => {
+    //   // Call method to log in
+    //   client.loginWithRedirect({
+    //     redirect_uri: `${window.location.origin}`,
+    //     appState: { target: redirectPath }
+    //   });
+    // });
+    setTimeout(() => { this.loggedIn = true; }, 500);
   }
 
   private handleAuthCallback() {
@@ -116,12 +117,13 @@ export class AuthService {
 
   logout() {
     // Ensure Auth0 client instance exists
-    this.auth0Client$.subscribe((client: Auth0Client) => {
-      // Call method to log out
-      client.logout({
-        client_id: "06wcG6Ht5I3Adn244TYqldeEW30ceVG2",
-        returnTo: `${window.location.origin}`
-      });
-    });
+    // this.auth0Client$.subscribe((client: Auth0Client) => {
+    //   // Call method to log out
+    //   client.logout({
+    //     client_id: "06wcG6Ht5I3Adn244TYqldeEW30ceVG2",
+    //     returnTo: `${window.location.origin}`
+    //   });
+    // });
+    setTimeout(() => { this.loggedIn = false; }, 500);
   }
 }
