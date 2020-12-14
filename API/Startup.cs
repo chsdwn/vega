@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using API.Core.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System;
 
 namespace API
 {
@@ -24,7 +25,8 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(options => {
+            services.AddAuthentication(options =>
+            {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
@@ -42,17 +44,37 @@ namespace API
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAutoMapper(typeof(Startup));
-            
-            services.AddDbContext<VegaDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddControllersWithViews().AddNewtonsoftJson(options => 
+            var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+            // Parse connection URL to connection string for Npgsql
+            connUrl = connUrl.Replace("postgres://", string.Empty);
+
+            var pgUserPass = connUrl.Split("@")[0];
+            var pgHostPortDb = connUrl.Split("@")[1];
+            var pgHostPort = pgHostPortDb.Split("/")[0];
+
+            var pgDb = pgHostPortDb.Split("/")[1];
+            var pgUser = pgUserPass.Split(":")[0];
+            var pgPass = pgUserPass.Split(":")[1];
+            var pgHost = pgHostPort.Split(":")[0];
+            var pgPort = pgHostPort.Split(":")[1];
+
+            var connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb}";
+
+            services.AddEntityFrameworkNpgsql().AddDbContext<VegaDbContext>(options =>
+                options.UseNpgsql(connStr));
+
+            // services.AddDbContext<VegaDbContext>(options =>
+            //     options.UseSqlite(Configuration.GetConnectionString("DefaultConnectionSqlite")));
+
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-            services.AddCors(options => 
+            services.AddCors(options =>
                 {
                     options.AddDefaultPolicy(
-                        builder => 
+                        builder =>
                         {
                             builder.WithOrigins("http://localhost:4200")
                                 .AllowAnyHeader()

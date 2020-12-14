@@ -37,7 +37,7 @@ namespace API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", "1, 1"),
                     Name = table.Column<string>(nullable: true),
                     MakeId = table.Column<int>(nullable: true)
                 },

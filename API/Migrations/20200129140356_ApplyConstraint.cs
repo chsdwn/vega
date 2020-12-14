@@ -12,7 +12,7 @@ namespace API.Migrations
                 maxLength: 255,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
+                oldType: "nvarchar",
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
@@ -21,7 +21,7 @@ namespace API.Migrations
                 maxLength: 255,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
+                oldType: "nvarchar",
                 oldNullable: true);
         }
 
@@ -30,7 +30,7 @@ namespace API.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "Models",
-                type: "nvarchar(max)",
+                type: "nvarchar",
                 nullable: true,
                 oldClrType: typeof(string),
                 oldMaxLength: 255);
@@ -38,7 +38,7 @@ namespace API.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "Makes",
-                type: "nvarchar(max)",
+                type: "nvarchar",
                 nullable: true,
                 oldClrType: typeof(string),
                 oldMaxLength: 255);

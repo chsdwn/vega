@@ -16,7 +16,7 @@ namespace API.Migrations
                 maxLength: 255,
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
+                oldType: "nvarchar",
                 oldNullable: true);
 
             migrationBuilder.AddColumn<bool>(
@@ -35,7 +35,7 @@ namespace API.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "ContactEmail",
                 table: "Vehicles",
-                type: "nvarchar(max)",
+                type: "nvarchar",
                 nullable: true,
                 oldClrType: typeof(string),
                 oldMaxLength: 255,
